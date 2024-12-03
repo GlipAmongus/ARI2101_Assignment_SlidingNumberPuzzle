@@ -6,30 +6,28 @@ public class State {
 
   public int gCost; // Cost from start state to state n
   public int hCost; // Cost from state n to goal state (when using hueristic)
-  public int misplacedTiles; // Count of number of displaced tiles
 
   // Will redundancy be checked by retracing and comparing states to parents, or
   // keeping a dynamic array during run time?
   public State parent; // Store state's parent state
-  public ArrayList<State> children; // Current state's reachable children
 
   public int fCost() {
     return hCost + gCost;
   }
 
-  public ArrayList<State> Children(State state) {
+  public ArrayList<State> children() {
+    ArrayList<State> children = new ArrayList<>(); // Current state's reachable children
 
     if (emptyTileIndex - 3 >= 0) { // Precondition for down move
       State child = new State();
 
-      child.puzzleStructure = state.puzzleStructure;
-      child.puzzleStructure[emptyTileIndex] = state.puzzleStructure[emptyTileIndex - 3];
+      child.puzzleStructure = this.puzzleStructure;
+      child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex - 3];
       child.puzzleStructure[emptyTileIndex - 3] = 0;
 
       if (!RedundantState(child)) {
         child.emptyTileIndex = emptyTileIndex - 3;
-        child.misplacedTiles = MisplacedTiles(child); // Can probably remove this later
-        child.parent = state;
+        child.parent = this;
         children.add(child);
       }
     }
@@ -37,14 +35,13 @@ public class State {
     if (emptyTileIndex + 3 <= 9) { // Precondition for up move
       State child = new State();
 
-      child.puzzleStructure = state.puzzleStructure;
-      child.puzzleStructure[emptyTileIndex] = state.puzzleStructure[emptyTileIndex + 3];
+      child.puzzleStructure = this.puzzleStructure;
+      child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex + 3];
       child.puzzleStructure[emptyTileIndex + 3] = 0;
 
       if (!RedundantState(child)) {
         child.emptyTileIndex = emptyTileIndex + 3;
-        child.misplacedTiles = MisplacedTiles(child); // Can probably remove this later
-        child.parent = state;
+        child.parent = this;
         children.add(child);
       }
     }
@@ -52,14 +49,13 @@ public class State {
     if (emptyTileIndex % 3 == 0 || emptyTileIndex % 3 == 1) { // Precondition for left move
       State child = new State();
 
-      child.puzzleStructure = state.puzzleStructure;
-      child.puzzleStructure[emptyTileIndex] = state.puzzleStructure[emptyTileIndex + 1];
+      child.puzzleStructure = this.puzzleStructure;
+      child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex + 1];
       child.puzzleStructure[emptyTileIndex + 1] = 0;
 
       if (!RedundantState(child)) {
         child.emptyTileIndex = emptyTileIndex + 1;
-        child.misplacedTiles = MisplacedTiles(child); // Can probably remove this later
-        child.parent = state;
+        child.parent = this;
         children.add(child);
       }
     }
@@ -67,29 +63,28 @@ public class State {
     if (emptyTileIndex % 3 == 1 || emptyTileIndex % 3 == 2) { // Precondition for right move
       State child = new State();
 
-      child.puzzleStructure = state.puzzleStructure;
-      child.puzzleStructure[emptyTileIndex] = state.puzzleStructure[emptyTileIndex - 1];
+      child.puzzleStructure = this.puzzleStructure;
+      child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex - 1];
       child.puzzleStructure[emptyTileIndex - 1] = 0;
 
       if (!RedundantState(child)) {
         child.emptyTileIndex = emptyTileIndex - 0;
-        child.misplacedTiles = MisplacedTiles(child); // Can probably remove this later
-        child.parent = state;
+        child.parent = this;
         children.add(child);
       }
     }
-    
+
     return children;
   }
 
-  public int MisplacedTiles(State state) {
-    int misplacedsTiles = 0;
+  public int misplacedTiles() {
+    int misplacedTiles = 0;
     for (int i = 0; i < 8; i++) {
-      if (state.puzzleStructure[i] == i + 1) {
+      if (this.puzzleStructure[i] == i + 1) {
         misplacedTiles++;
       }
     }
-    return misplacedsTiles;
+    return misplacedTiles;
   }
 
   // Traverse ancestry of state until copy found or entire ancestry checked
