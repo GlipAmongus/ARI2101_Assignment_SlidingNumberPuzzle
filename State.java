@@ -21,9 +21,16 @@ public class State {
     return hCost + gCost;
   }
 
-  public void redundantState(State current, State parent) {
-    if (current == current.parent) {
-      this.redundantState = true;
+  public void redundantState(State newborn) {
+    State ancestor = newborn.parent;
+    while(ancestor != null){
+      if(newborn.equals(ancestor)){
+        newborn.redundantState = true;
+        return;
+      }else{
+        ancestor = ancestor.parent;
+      }
     }
+    newborn.redundantState = false;
   }
 }
