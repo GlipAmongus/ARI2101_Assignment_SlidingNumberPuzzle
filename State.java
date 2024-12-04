@@ -13,18 +13,16 @@ public class State {
 
   public State(int[] puzzleStructure) {
     this.puzzleStructure = puzzleStructure;
-    emptyTileIndex(); // Automatically update
+    for(int i = 0; i < 9; i++) {
+      if(this.puzzleStructure[i] == 0){
+        this.emptyTileIndex = i;
+        break;
+      }
+    }
   }
 
   public int fCost() { // use only when using hueristic
     return hCost + gCost;
-  }
-
-  public void emptyTileIndex() { // sets the position of empty tile
-    for(int i = 0; i < 9; i++) {
-      if(this.puzzleStructure[i] == 0)
-        this.emptyTileIndex = i;
-    }
   }
 
   public ArrayList<State> children() { // allowed moves
