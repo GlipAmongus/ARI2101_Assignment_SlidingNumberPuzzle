@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class State {
   public int[] puzzleStructure = new int[9]; // order of tiles
@@ -11,8 +12,9 @@ public class State {
   // keeping a dynamic array during run time?
   public State parent; // Store state's parent state
 
-  public State(int[] puzzleStructure) {
+  public State(int[] puzzleStructure, State parent) {
     this.puzzleStructure = puzzleStructure;
+    this.parent = parent;
     for(int i = 0; i < 9; i++) {
       if(this.puzzleStructure[i] == 0){
         this.emptyTileIndex = i;
@@ -29,10 +31,9 @@ public class State {
     ArrayList<State> children = new ArrayList<>(); // Current state's reachable children
 
     if (emptyTileIndex - 3 >= 0) { // Precondition for down move
-      State child = new State(this.puzzleStructure);
+      State child = new State(this.puzzleStructure.clone(), this);
       child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex - 3];
       child.puzzleStructure[emptyTileIndex - 3] = 0;
-
       if (!RedundantState(child)) {
         child.emptyTileIndex = emptyTileIndex - 3;
         child.parent = this;
@@ -40,8 +41,8 @@ public class State {
       }
     }
 
-    if (emptyTileIndex + 3 <= 9) { // Precondition for up move
-      State child = new State(this.puzzleStructure);
+    if (emptyTileIndex + 3 <= 8) { // Precondition for up move
+      State child = new State(this.puzzleStructure.clone(), this);
 
       child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex + 3];
       child.puzzleStructure[emptyTileIndex + 3] = 0;
@@ -54,7 +55,8 @@ public class State {
     }
 
     if (emptyTileIndex % 3 == 0 || emptyTileIndex % 3 == 1) { // Precondition for left move
-      State child = new State(this.puzzleStructure);
+      State child = new State(this.puzzleStructure.clone(), this);
+
       
       child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex + 1];
       child.puzzleStructure[emptyTileIndex + 1] = 0;
@@ -67,13 +69,14 @@ public class State {
     }
 
     if (emptyTileIndex % 3 == 1 || emptyTileIndex % 3 == 2) { // Precondition for right move
-      State child = new State(this.puzzleStructure);
+      State child = new State(this.puzzleStructure.clone(), this);
+
       
       child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex - 1];
       child.puzzleStructure[emptyTileIndex - 1] = 0;
 
       if (!RedundantState(child)) {
-        child.emptyTileIndex = emptyTileIndex - 0;
+        child.emptyTileIndex = emptyTileIndex - 1;
         child.parent = this;
         children.add(child);
       }
@@ -96,7 +99,7 @@ public class State {
   public boolean RedundantState(State state) {
     State ancestor = state.parent;
     while (ancestor != null) {
-      if (state.equals(ancestor)) {
+      if (Arrays.equals(state.puzzleStructure, ancestor.puzzleStructure)) {
         return true;
       } else {
         ancestor = ancestor.parent;
@@ -104,4 +107,5 @@ public class State {
     }
     return false;
   }
+
 }
