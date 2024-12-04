@@ -1,71 +1,51 @@
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.Collections;
 
 public class FindPlan {
-    ArrayList<State> plan;
-    static int[] goalStateStructure = new int[] {1,2,3,4,5,6,7,8,0};
-
+    // Plan Output
+    public ArrayList<Character> plan;   // list of moves done (l,u,r,d)
+    public int actions;                 // length of the plan
+    public int uniqueStates;            // number of unique states gen. unexpanded included
+    public boolean validity;            // plan validity
+    
     public static void main(String[] args) {
 
-        State initialState1 = new State(new int[] {8,6,7,2,5,4,3,0,1}, null);
-        State initialState2 = new State(new int[] {6,4,7,8,5,0,3,2,1}, null);
+        State initialState = new State(new int[] {1,2,3,4,5,6,7,8,0}, null);
 
         //FindAstarPlan(initialState2);
-        if(FindDepthFirstPlan(initialState1))
+        if(SearchAlgorithms.FindDepthFirstPlan(initialState))
             System.out.println("Plan found!");
         else
         System.out.println("Plan not found!");
 
     }
 
-    public static boolean FindDepthFirstPlan(State initialState){
-        //open children
-        //append to edgenodes
-        //for every edgenode open children and append
-        //if goal state exit
-
-        LinkedList<State> edgeNodes = new LinkedList<>();
-        edgeNodes.add(initialState);
-
-        while(!edgeNodes.isEmpty()){
-            State headState = edgeNodes.removeFirst();
-            PrintState(headState.puzzleStructure);
-            if(Arrays.equals(headState.puzzleStructure, goalStateStructure)){
-                //retrace
-                return true;
-            }
-
-            edgeNodes.addAll(headState.children());
+    //================= Diagnostic Functions ============================
+    public void retracePlanDiagnostics(State goalFound){ // Plan output
+        State ancestor = goalFound.parent;
+        validity = true;
+        while(ancestor != null){            
+            plan.add(ancestor.move);  
+            actions++;                       
+            ancestor = ancestor.parent; 
         }
-        return false;
-
-
-
-        // Implement depth-first search algorithm here
-        // Return the plan as an ArrayList of states
-        // Example:
-        // plan.add(initialState);
-        // while (!goalState.equals(plan.get(plan.size()-1))) {
-        //     State currentState = plan.get(plan.size()-1);
-        //     ArrayList<State> children = currentState.children();
-        //     for (State child : children) {
-        //         plan.add(child);
-        //     }
-        // }
-        // return plan;
+        Collections.reverse(plan);
     }
-    
-    public static void PrintState(int[] statePuzzlePostion){
+
+    public static void PrintPuzzlePosition(int[] statePuzzlePostion){
         System.out.print("[");        
         for(int i = 0; i < 9; i++){
-            if(i == 2 || i == 5)
-                System.out.println(statePuzzlePostion[i] + ",");
-            else
-                System.out.print(statePuzzlePostion[i] + ",");
+            switch (i) {
+                case 2,5:
+                    System.out.println(statePuzzlePostion[i] + ",");
+                    break;
+                case 8:
+                    System.out.print(statePuzzlePostion[i]);
+                default:
+                    System.out.print(statePuzzlePostion[i] + ",");
+                    break;
+            }
         }
         System.out.println("]");        
     }
-    // Plan finding logic goes here (main)
-    // Specific search algorithms go in seprate files
 }
