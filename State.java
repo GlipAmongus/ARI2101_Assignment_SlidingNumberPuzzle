@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class State {
-  public int[] puzzleStructure = new int[8];
+  public int[] puzzleStructure = new int[9]; // order of tiles
   public int emptyTileIndex; // Array index of zero (empty tile) (i.e. {1,2,3,4,5,6,7,8,0} eTI = 8)
 
   public int gCost; // Cost from start state to state n
@@ -11,17 +11,27 @@ public class State {
   // keeping a dynamic array during run time?
   public State parent; // Store state's parent state
 
-  public int fCost() {
+  public State(int[] puzzleStructure) {
+    this.puzzleStructure = puzzleStructure;
+    emptyTileIndex(); // Automatically update
+  }
+
+  public int fCost() { // use only when using hueristic
     return hCost + gCost;
   }
 
-  public ArrayList<State> children() {
+  public void emptyTileIndex() { // sets the position of empty tile
+    for(int i = 0; i < 9; i++) {
+      if(this.puzzleStructure[i] == 0)
+        this.emptyTileIndex = i;
+    }
+  }
+
+  public ArrayList<State> children() { // allowed moves
     ArrayList<State> children = new ArrayList<>(); // Current state's reachable children
 
     if (emptyTileIndex - 3 >= 0) { // Precondition for down move
-      State child = new State();
-
-      child.puzzleStructure = this.puzzleStructure;
+      State child = new State(this.puzzleStructure);
       child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex - 3];
       child.puzzleStructure[emptyTileIndex - 3] = 0;
 
@@ -33,9 +43,8 @@ public class State {
     }
 
     if (emptyTileIndex + 3 <= 9) { // Precondition for up move
-      State child = new State();
+      State child = new State(this.puzzleStructure);
 
-      child.puzzleStructure = this.puzzleStructure;
       child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex + 3];
       child.puzzleStructure[emptyTileIndex + 3] = 0;
 
@@ -47,9 +56,8 @@ public class State {
     }
 
     if (emptyTileIndex % 3 == 0 || emptyTileIndex % 3 == 1) { // Precondition for left move
-      State child = new State();
-
-      child.puzzleStructure = this.puzzleStructure;
+      State child = new State(this.puzzleStructure);
+      
       child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex + 1];
       child.puzzleStructure[emptyTileIndex + 1] = 0;
 
@@ -61,9 +69,8 @@ public class State {
     }
 
     if (emptyTileIndex % 3 == 1 || emptyTileIndex % 3 == 2) { // Precondition for right move
-      State child = new State();
-
-      child.puzzleStructure = this.puzzleStructure;
+      State child = new State(this.puzzleStructure);
+      
       child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex - 1];
       child.puzzleStructure[emptyTileIndex - 1] = 0;
 
