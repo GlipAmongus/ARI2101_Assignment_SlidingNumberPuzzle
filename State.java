@@ -36,12 +36,12 @@ public class State {
       child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex - 3]; // Swap zero and tile above
       child.puzzleStructure[emptyTileIndex - 3] = 0;
 
-      if (!RedundantState(child)) {
+      // if (!RedundantState(child)) {
         child.emptyTileIndex = emptyTileIndex - 3;
         child.parent = this;
         child.move = 'd';
         children.add(child);
-      }
+      // }
     }
 
     if (emptyTileIndex + 3 <= 8) {                                                      // Precondition for up move
@@ -49,12 +49,12 @@ public class State {
       child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex + 3]; // Swap zero and tile below
       child.puzzleStructure[emptyTileIndex + 3] = 0;
 
-      if (!RedundantState(child)) {
+      // if (!RedundantState(child)) {
         child.emptyTileIndex = emptyTileIndex + 3;
         child.parent = this;
         child.move = 'u';
         children.add(child);
-      }
+      // }
     }
 
     if (emptyTileIndex % 3 == 0 || emptyTileIndex % 3 == 1) {                           // Precondition for left move
@@ -62,12 +62,12 @@ public class State {
       child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex + 1]; // Swap zero and tile on the left
       child.puzzleStructure[emptyTileIndex + 1] = 0;
 
-      if (!RedundantState(child)) {
+      // if (!RedundantState(child)) {
         child.emptyTileIndex = emptyTileIndex + 1;
         child.parent = this;
         child.move = 'l';
         children.add(child);
-      }
+      // }
     }
 
     if (emptyTileIndex % 3 == 1 || emptyTileIndex % 3 == 2) {                           // Precondition for right move
@@ -75,12 +75,12 @@ public class State {
       child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex - 1]; // Swap zero and tile on the right
       child.puzzleStructure[emptyTileIndex - 1] = 0;
 
-      if (!RedundantState(child)) {
+      // if (!RedundantState(child)) {
         child.emptyTileIndex = emptyTileIndex - 1;
         child.parent = this;
         child.move = 'r';
         children.add(child);
-      }
+      // }
     }
     return children;
   }

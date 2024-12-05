@@ -7,13 +7,13 @@ public class FindPlan {
     public int actions;                 // length of the plan
     public int uniqueStates;            // number of unique states gen. unexpanded included
     public boolean validity;            // plan validity
-    
+
     public static void main(String[] args) {
 
-        State initialState = new State(new int[] {1,2,3,4,5,6,7,8,0}, null);
+        State initialState = new State(new int[] {6,4,7,8,5,0,3,2,1}, null);
 
         //FindAstarPlan(initialState2);
-        if(SearchAlgorithms.FindDepthFirstPlan(initialState))
+        if(SearchAlgorithms.FindBreadthFirstPlan(initialState))
             System.out.println("Plan found!");
         else
         System.out.println("Plan not found!");
