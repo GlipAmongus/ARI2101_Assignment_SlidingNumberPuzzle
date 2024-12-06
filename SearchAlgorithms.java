@@ -20,9 +20,13 @@ public class SearchAlgorithms {
             State headState = edgeStates.removeFirst();
             List<Integer> puzzleList = Arrays.stream(headState.puzzleStructure).boxed().toList();
 
-            if (Arrays.equals(headState.puzzleStructure, goalStateStructure))
+            if (Arrays.equals(headState.puzzleStructure, goalStateStructure)){
+                int unique = closedStates.size() + edgeStates.size();
+                System.out.println("unique: "+ unique);
                 return headState;
-            
+            }
+                
+
             if (!closedStates.contains(puzzleList)) {
                 closedStates.add(puzzleList);
                 edgeStates.addAll(headState.children());
@@ -56,8 +60,11 @@ public class SearchAlgorithms {
             inEdgeStates.remove(headList);
             closedStates.add(headList);
 
-            if (Arrays.equals(headState.puzzleStructure, goalState.puzzleStructure)) 
+            if (Arrays.equals(headState.puzzleStructure, goalState.puzzleStructure)){
+                int unique = closedStates.size() + inEdgeStates.size();
+                System.out.println("unique: "+ unique);
                 return headState;
+            }
 
             for (State child : headState.children()) {
                 List<Integer> childList = Arrays.stream(child.puzzleStructure).boxed().toList();
@@ -100,15 +107,15 @@ public class SearchAlgorithms {
         }
         return cost;
     }
-    
+
     public static Integer MisplacedTiles(State state, State destination) {
         int cost = 0;
         for (int i = 1; i < 9; i++) {
             if (state.puzzleStructure[i - 1] == i &&
-            state.puzzleStructure[i - 1] != destination.puzzleStructure[i - 1])
+                    state.puzzleStructure[i - 1] != destination.puzzleStructure[i - 1])
                 cost++;
         }
         return cost;
     }
-    
+
 }
