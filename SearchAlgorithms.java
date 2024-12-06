@@ -12,31 +12,75 @@ public class SearchAlgorithms {
         int[] goalStateStructure = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 0 };
 
         LinkedList<State> edgeStates = new LinkedList<>();
-        HashSet<List<Integer>> closedStates = new HashSet<>();
+        HashSet<State> closedStates = new HashSet<>();
 
         edgeStates.add(initialState);
 
         while (!edgeStates.isEmpty()) {
             State headState = edgeStates.removeFirst();
-            List<Integer> puzzleList = Arrays.stream(headState.puzzleStructure).boxed().toList();
 
-            if (Arrays.equals(headState.puzzleStructure, goalStateStructure)){
+            if (Arrays.equals(headState.puzzleStructure, goalStateStructure)) {
                 int unique = closedStates.size() + edgeStates.size();
-                System.out.println("unique: "+ unique);
+                System.out.println("unique: " + unique);
                 return headState;
             }
-                
 
-            if (!closedStates.contains(puzzleList)) {
-                closedStates.add(puzzleList);
+            if (!closedStates.contains(headState)) {
+                closedStates.add(headState);
                 edgeStates.addAll(headState.children());
             }
         }
         return null;
     }
 
+    // ================= Greedy Search ============================
+    public static State FindGreedyPlan(State initialState, BiFunction<State, State, Integer> DistanceFunction) {
+        State goalState = new State(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 0 }, null);
+
+        PriorityQueue<State> edgeStates = new PriorityQueue<>(
+                (state1, state2) -> Integer.compare(state1.gCost, state2.gCost));
+
+        HashSet<State> closedStates = new HashSet<>();
+        HashSet<State> inEdgeStates = new HashSet<>();
+
+        edgeStates.add(initialState);
+        inEdgeStates.add(initialState);
+
+        while (!edgeStates.isEmpty()) { // traverse all edge States
+            State headState = edgeStates.poll();
+
+            inEdgeStates.remove(initialState);
+            closedStates.add(headState);
+
+            if (Arrays.equals(headState.puzzleStructure, goalState.puzzleStructure)) {
+                int unique = closedStates.size() + edgeStates.size();
+                System.out.println("unique: " + unique);
+                return headState;
+            }
+
+            for (State child : headState.children()) {
+
+                if (closedStates.contains(child))
+                    continue;
+
+                // Update costs if a shorter path exists
+                int CostToChild = headState.gCost + DistanceFunction.apply(headState, child);
+                if (CostToChild < child.gCost || !edgeStates.contains(child)) {
+                    child.gCost = CostToChild;
+
+                    if (!edgeStates.contains(child)){
+                        edgeStates.add(child);
+                        inEdgeStates.add(child);
+                    }
+                }
+
+            }
+        }
+        return null;
+    }
+
     // ================= A* Search ============================
-    public static State FindAstarPlan(State initialState, BiFunction<State, State, Integer> Hueristic) {
+    public static State FindAstarPlan(State initialState, BiFunction<State, State, Integer> DistanceFunction) {
         State goalState = new State(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 0 }, null);
 
         PriorityQueue<State> edgeStates = new PriorityQueue<>(
@@ -48,47 +92,46 @@ public class SearchAlgorithms {
                     }
                 });
 
-        HashSet<List<Integer>> closedStates = new HashSet<>();
-        HashSet<List<Integer>> inEdgeStates = new HashSet<>();
+        HashSet<State> closedStates = new HashSet<>();
+        HashSet<State> inEdgeStates = new HashSet<>();
 
         edgeStates.add(initialState);
+        inEdgeStates.add(initialState);
 
         while (!edgeStates.isEmpty()) { // traverse all edge States
             State headState = edgeStates.poll();
-            List<Integer> headList = Arrays.stream(headState.puzzleStructure).boxed().toList();
 
-            inEdgeStates.remove(headList);
-            closedStates.add(headList);
+            inEdgeStates.remove(headState);
+            closedStates.add(headState);
 
-            if (Arrays.equals(headState.puzzleStructure, goalState.puzzleStructure)){
-                int unique2 = inEdgeStates.size();
-                System.out.println("unique: "+ unique2);
+            if (Arrays.equals(headState.puzzleStructure, goalState.puzzleStructure)) {
+                int unique = closedStates.size() + edgeStates.size();
+                System.out.println("unique: " + unique);
                 return headState;
             }
 
             for (State child : headState.children()) {
-                List<Integer> childList = Arrays.stream(child.puzzleStructure).boxed().toList();
 
-                if (closedStates.contains(childList))
+                if (closedStates.contains(child))
                     continue;
 
-                int CostToChild = headState.gCost + Hueristic.apply(headState, child);
-                if (CostToChild < child.gCost || !inEdgeStates.contains(childList)) {
+                int CostToChild = headState.gCost + DistanceFunction.apply(headState, child);
+                if (CostToChild < child.gCost || !inEdgeStates.contains(child)) {
                     child.gCost = CostToChild;
-                    child.hCost = Hueristic.apply(child, goalState);
+                    child.hCost = DistanceFunction.apply(child, goalState);
 
-                    if (!inEdgeStates.contains(childList))
+                    if (!inEdgeStates.contains(child)){
                         edgeStates.add(child);
-                    inEdgeStates.add(headList);
+                        inEdgeStates.add(child);
+                    }
                 }
-
             }
         }
         return null;
     }
 
     // ================= Hueristic Functions ============================
-    public static Integer DistanceFunction(State state, State destination) {
+    public static Integer ManhattanFunction(State state, State destination) {
         int cost = 0;
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {

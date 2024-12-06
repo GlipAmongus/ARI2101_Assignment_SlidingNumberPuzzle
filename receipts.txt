@@ -1,19 +1,48 @@
 ======== Breadth First Search ========
 
 unique: 181559
-Plan found: 1421ms
+Plan found: 411ms
 Actions: 31
 Validity: true
 [l, u, r, u, l, l, d, r, r, u, l, l, d, r, d, r, u, u, l, d, d, l, u, r, d, r, u, l, u, r, d, ]
 
 =======================================
 
-============== A* Search ==============
+====== Greedy Search (Manhattan) =====
 
-unique: 143433
-Plan found: 2688ms
+unique: 178395
+Plan found: 771ms
 Actions: 31
 Validity: true
-[u, u, l, l, d, d, r, r, u, l, l, d, r, r, u, u, l, d, l, d, r, r, u, u, l, l, d, r, d, r, u, ]
+[u, l, l, d, r, r, u, u, l, l, d, r, d, r, u, u, l, l, d, r, d, r, u, u, l, l, d, d, r, r, u, ]
+
+=======================================
+
+====== Greedy Search (Misplaced) =====
+
+unique: 181438
+Plan found: 1290ms
+Actions: 31
+Validity: true
+
+=======================================
+
+======== A* Search (Manhattan) =======
+
+unique: 181438
+Plan found: 1977ms
+Actions: 31
+Validity: true
+[l, u, r, u, l, l, d, d, r, u, l, d, r, r, u, u, l, d, l, d, r, r, u, u, l, l, d, d, r, r, u, ]
+
+=======================================
+
+======== A* Search (Missing) =======
+
+unique: 181438
+Plan found: 744ms
+Actions: 31
+Validity: true
+[l, u, r, u, l, l, d, d, r, u, l, d, r, r, u, u, l, d, l, d, r, r, u, u, l, l, d, d, r, r, u, ]
 
 =======================================

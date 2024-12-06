@@ -23,6 +23,19 @@ public class State {
     }
   }
 
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null || getClass() != obj.getClass())
+      return false;
+    State state = (State) obj;
+    return Arrays.equals(puzzleStructure, state.puzzleStructure);
+  }
+
+  public int hashCode() {
+    return Arrays.hashCode(puzzleStructure);
+  }
+
   public int fCost() { // use only when using hueristic
     return hCost + gCost;
   }

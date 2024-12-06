@@ -9,6 +9,5 @@ State definition and innerworkings    -> State class
 
 
 Problems
-Astar taking too damn long !!!- but terminates
-
-missing misplacedTiles hueristic
+try implementing heap
+astar isnt optimized but is admissable
