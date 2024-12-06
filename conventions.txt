@@ -6,3 +6,9 @@ include comments at function groups, class variables, inline for methods
 Search algorithms, distance functions -> SearchAlgorithms class
 main method and diagnostics           -> FindPlan class
 State definition and innerworkings    -> State class 
+
+
+Problems
+Astar taking too damn long !!!- but terminates
+
+missing misplacedTiles hueristic

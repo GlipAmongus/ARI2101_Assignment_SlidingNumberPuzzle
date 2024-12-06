@@ -15,8 +15,8 @@ public class State {
   public State(int[] puzzleStructure, State parent) {
     this.puzzleStructure = puzzleStructure;
     this.parent = parent;
-    for(int i = 0; i < 9; i++) {
-      if(this.puzzleStructure[i] == 0){ // Calculates initial index of zero
+    for (int i = 0; i < 9; i++) {
+      if (this.puzzleStructure[i] == 0) { // Calculates initial index of zero
         this.emptyTileIndex = i;
         break;
       }
@@ -28,65 +28,61 @@ public class State {
   }
 
   // Get all allowed state transitions
-  public ArrayList<State> children() { 
-    ArrayList<State> children = new ArrayList<>(); 
+  public ArrayList<State> children() {
+    ArrayList<State> children = new ArrayList<>();
 
-    if (emptyTileIndex - 3 >= 0) {                                                      // Precondition for down move
-      State child = new State(this.puzzleStructure.clone(), this);  
+    if (emptyTileIndex - 3 >= 0) { // Precondition for down move
+      State child = new State(this.puzzleStructure.clone(), this);
       child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex - 3]; // Swap zero and tile above
       child.puzzleStructure[emptyTileIndex - 3] = 0;
 
-      // if (!RedundantState(child)) {
-        child.emptyTileIndex = emptyTileIndex - 3;
-        child.parent = this;
-        child.move = 'd';
-        children.add(child);
-      // }
+      child.emptyTileIndex = emptyTileIndex - 3;
+      child.parent = this;
+      child.move = 'd';
+      child.gCost = this.gCost++;
+      children.add(child);
     }
 
-    if (emptyTileIndex + 3 <= 8) {                                                      // Precondition for up move
+    if (emptyTileIndex + 3 <= 8) { // Precondition for up move
       State child = new State(this.puzzleStructure.clone(), this);
       child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex + 3]; // Swap zero and tile below
       child.puzzleStructure[emptyTileIndex + 3] = 0;
 
-      // if (!RedundantState(child)) {
-        child.emptyTileIndex = emptyTileIndex + 3;
-        child.parent = this;
-        child.move = 'u';
-        children.add(child);
-      // }
+      child.emptyTileIndex = emptyTileIndex + 3;
+      child.parent = this;
+      child.move = 'u';
+      child.gCost = this.gCost++;
+      children.add(child);
     }
 
-    if (emptyTileIndex % 3 == 0 || emptyTileIndex % 3 == 1) {                           // Precondition for left move
-      State child = new State(this.puzzleStructure.clone(), this);                    
-      child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex + 1]; // Swap zero and tile on the left
+    if (emptyTileIndex % 3 == 0 || emptyTileIndex % 3 == 1) { // Precondition for left move
+      State child = new State(this.puzzleStructure.clone(), this);
+      child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex + 1]; // Swap zero and left tile
       child.puzzleStructure[emptyTileIndex + 1] = 0;
 
-      // if (!RedundantState(child)) {
-        child.emptyTileIndex = emptyTileIndex + 1;
-        child.parent = this;
-        child.move = 'l';
-        children.add(child);
-      // }
+      child.emptyTileIndex = emptyTileIndex + 1;
+      child.parent = this;
+      child.move = 'l';
+      child.gCost = this.gCost++;
+      children.add(child);
     }
 
-    if (emptyTileIndex % 3 == 1 || emptyTileIndex % 3 == 2) {                           // Precondition for right move
+    if (emptyTileIndex % 3 == 1 || emptyTileIndex % 3 == 2) { // Precondition for right move
       State child = new State(this.puzzleStructure.clone(), this);
-      child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex - 1]; // Swap zero and tile on the right
+      child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex - 1]; // Swap zero and right tile
       child.puzzleStructure[emptyTileIndex - 1] = 0;
 
-      // if (!RedundantState(child)) {
-        child.emptyTileIndex = emptyTileIndex - 1;
-        child.parent = this;
-        child.move = 'r';
-        children.add(child);
-      // }
+      child.emptyTileIndex = emptyTileIndex - 1;
+      child.parent = this;
+      child.move = 'r';
+      child.gCost = this.gCost++;
+      children.add(child);
     }
     return children;
   }
 
   // Count of misplaced tiles
-  public int misplacedTiles() { 
+  public int misplacedTiles() {
     int misplacedTiles = 0;
     for (int i = 0; i < 8; i++) {
       if (this.puzzleStructure[i] == i + 1) {
@@ -96,17 +92,12 @@ public class State {
     return misplacedTiles;
   }
 
-  // Traverse ancestry of state until copy found or entire ancestry checked
-  public boolean RedundantState(State state) {
-    State ancestor = state.parent;
-    while (ancestor != null) {
-      if (Arrays.equals(state.puzzleStructure, ancestor.puzzleStructure)) {
-        return true;
-      } else {
-        ancestor = ancestor.parent;
+  public boolean isEquals(State state) {
+    for (int i = 0; i < 9; i++) {
+      if (this.puzzleStructure[i] != state.puzzleStructure[i]) {
+        return false;
       }
     }
-    return false;
+    return true;
   }
-
 }
