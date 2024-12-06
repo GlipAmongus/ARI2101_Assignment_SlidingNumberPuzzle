@@ -16,22 +16,18 @@ public class FindPlan {
         FindPlan insBreadth = new FindPlan();
         FindPlan insAstar = new FindPlan();
 
-        // State initialState = new State(new int[] { 6, 4, 7, 8, 5, 0, 3, 2, 1 }, null);
-        State initialState = new State(new int[] {1,2,3,0,4,5,6,7,8}, null);
+        State initialState = new State(new int[] { 6, 4, 7, 8, 5, 0, 3, 2, 1 }, null);
+        // State initialState = new State(new int[] {1,2,3,0,4,5,6,7,8}, null);
 
-        long startTime, endTime, duration;
+        long startTime, endTime;
 
         // Test time for breadth first
+        // ================= Plan Receipt ============================
+        System.out.println("======== Breadth First Search ========\n");
         startTime = System.currentTimeMillis();
         insBreadth.goalFound = SearchAlgorithms.FindBreadthFirstPlan(initialState);
         endTime = System.currentTimeMillis(); // Record end time
         insBreadth.duration = endTime - startTime;
-
-        // Test time for breadth first
-        startTime = System.currentTimeMillis();
-        insAstar.goalFound = SearchAlgorithms.FindBreadthFirstPlan(initialState);
-        endTime = System.currentTimeMillis(); // Record end time
-        insAstar.duration = endTime - startTime;
 
         if (insBreadth.goalFound != null) {
             System.out.println("Plan found: " + insBreadth.duration + "ms");
@@ -39,23 +35,30 @@ public class FindPlan {
         } else {
             System.out.println("Plan not found!");
         }
-
-        // Test time for astar
+        System.out.println("\n=======================================\n");
+        // Test time for breadth first
+        System.out.println("============== A* Search ==============\n");
         startTime = System.currentTimeMillis();
-        if (SearchAlgorithms.FindAstarPlan(initialState, SearchAlgorithms::DistanceFunction) != null) {
-            endTime = System.currentTimeMillis(); // Record end time
-            duration = endTime - startTime;
-            System.out.println("Plan found: " + duration + "ms");
+        insAstar.goalFound = SearchAlgorithms.FindAstarPlan(initialState, SearchAlgorithms::DistanceFunction);
+        endTime = System.currentTimeMillis(); // Record end time
+        insAstar.duration = endTime - startTime;
+
+        if (insAstar.goalFound != null) {
+            System.out.println("Plan found: " + insAstar.duration + "ms");
+            insAstar.RetraceAndDiagnosePlan(insAstar.goalFound);
         } else {
             System.out.println("Plan not found!");
         }
+        System.out.println("\n=======================================\n");
     }
 
     // ================= Diagnostic Functions ============================
-    // ================= Retrace Function ============================
+    // ================= Retrace receipt ============================
     public void RetraceAndDiagnosePlan(State state) {
         // Flip first then print
         Stack<int[]> puzzleInstances = new Stack<>();       // stack to hold plan in correct order
+        
+        plan = new ArrayList<>();
 
         State ancestor = state.parent;
         puzzleInstances.add(state.puzzleStructure);
@@ -70,9 +73,10 @@ public class FindPlan {
         }
 
         // Print plan receipt
-        System.out.println("Actions" + actions);
-        System.out.println("Validity" + validity);
-        System.out.println("Actions" + actions);
+        System.out.println("Actions: " + actions);
+        System.out.println("Validity: " + validity);
+        System.out.println(plan);
+        
         // while(!puzzleInstances.isEmpty())
         //     PrintPuzzlePosition(puzzleInstances.pop());
 
@@ -87,6 +91,7 @@ public class FindPlan {
                     break;
                 case 8:
                     System.out.print(statePuzzlePostion[i]);
+                    break;
                 default:
                     System.out.print(statePuzzlePostion[i] + ",");
                     break;

@@ -61,8 +61,8 @@ public class SearchAlgorithms {
             closedStates.add(headList);
 
             if (Arrays.equals(headState.puzzleStructure, goalState.puzzleStructure)){
-                int unique = closedStates.size() + inEdgeStates.size();
-                System.out.println("unique: "+ unique);
+                int unique2 = inEdgeStates.size();
+                System.out.println("unique: "+ unique2);
                 return headState;
             }
 
