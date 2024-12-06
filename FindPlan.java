@@ -5,7 +5,7 @@ import java.lang.System;
 public class FindPlan {
     // Plan Output
     public ArrayList<Character> plan; // list of moves done (l,u,r,d)
-    public boolean validity; // plan validity
+                        // plan validity
     public int actions; // length of the plan
     public int uniqueStates; // number of unique states gen. unexpanded included
 
@@ -19,7 +19,10 @@ public class FindPlan {
         FindPlan insGreedyMisplaced = new FindPlan();
 
         FindPlan insAstarManhattan = new FindPlan();
-        FindPlan insAstarMissing = new FindPlan();
+        FindPlan insAstarMisplaced = new FindPlan();
+
+        FindPlan insEHCManhattan = new FindPlan();
+        FindPlan insEHCMisplaced = new FindPlan();
 
         State initialState = new State(new int[] { 6, 4, 7, 8, 5, 0, 3, 2, 1 },
                 null);
@@ -35,6 +38,7 @@ public class FindPlan {
 
         if (insBreadth.goalFound != null) {
             System.out.println("Plan found: " + insBreadth.duration + "ms");
+            System.out.println("Validity: True");
             insBreadth.RetraceAndDiagnosePlan(insBreadth.goalFound);
         } else {
             System.out.println("Plan not found!");
@@ -44,13 +48,14 @@ public class FindPlan {
 
         System.out.println("====== Greedy Search (Manhattan) =====\n");
         startTime = System.currentTimeMillis();
-        insGreedyManhattan.goalFound = SearchAlgorithms.FindAstarPlan(initialState,
+        insGreedyManhattan.goalFound = SearchAlgorithms.FindGreedyPlan(initialState,
                 SearchAlgorithms::ManhattanFunction);
         endTime = System.currentTimeMillis(); // Record end time
         insGreedyManhattan.duration = endTime - startTime;
 
         if (insGreedyManhattan.goalFound != null) {
             System.out.println("Plan found: " + insGreedyManhattan.duration + "ms");
+            System.out.println("Validity: True");
             insGreedyManhattan.RetraceAndDiagnosePlan(insGreedyManhattan.goalFound);
         } else {
             System.out.println("Plan not found!");
@@ -60,13 +65,14 @@ public class FindPlan {
 
         System.out.println("====== Greedy Search (Misplaced) =====\n");
         startTime = System.currentTimeMillis();
-        insGreedyMisplaced.goalFound = SearchAlgorithms.FindAstarPlan(initialState,
+        insGreedyMisplaced.goalFound = SearchAlgorithms.FindGreedyPlan(initialState,
                 SearchAlgorithms::MisplacedTiles);
         endTime = System.currentTimeMillis(); // Record end time
         insGreedyMisplaced.duration = endTime - startTime;
 
         if (insGreedyMisplaced.goalFound != null) {
             System.out.println("Plan found: " + insGreedyMisplaced.duration + "ms");
+            System.out.println("Validity: True");
             insGreedyMisplaced.RetraceAndDiagnosePlan(insGreedyMisplaced.goalFound);
         } else {
             System.out.println("Plan not found!");
@@ -77,29 +83,62 @@ public class FindPlan {
         System.out.println("======== A* Search (Manhattan) =======\n");
         startTime = System.currentTimeMillis();
         insAstarManhattan.goalFound = SearchAlgorithms.FindAstarPlan(initialState,
-                SearchAlgorithms::MisplacedTiles);
+                SearchAlgorithms::ManhattanFunction);
         endTime = System.currentTimeMillis(); // Record end time
         insAstarManhattan.duration = endTime - startTime;
 
         if (insAstarManhattan.goalFound != null) {
             System.out.println("Plan found: " + insAstarManhattan.duration + "ms");
+            System.out.println("Validity: True");
             insAstarManhattan.RetraceAndDiagnosePlan(insAstarManhattan.goalFound);
         } else {
             System.out.println("Plan not found!");
         }
         System.out.println("\n=======================================\n");
 
-
-        System.out.println("======== A* Search (Missing) =======\n");
+        System.out.println("======== A* Search (Misplaced) =======\n");
         startTime = System.currentTimeMillis();
-        insAstarMissing.goalFound = SearchAlgorithms.FindAstarPlan(initialState,
+        insAstarMisplaced.goalFound = SearchAlgorithms.FindAstarPlan(initialState,
                 SearchAlgorithms::MisplacedTiles);
         endTime = System.currentTimeMillis(); // Record end time
-        insAstarMissing.duration = endTime - startTime;
+        insAstarMisplaced.duration = endTime - startTime;
 
-        if (insAstarMissing.goalFound != null) {
-            System.out.println("Plan found: " + insAstarMissing.duration + "ms");
-            insAstarMissing.RetraceAndDiagnosePlan(insAstarMissing.goalFound);
+        if (insAstarMisplaced.goalFound != null) {
+            System.out.println("Plan found: " + insAstarMisplaced.duration + "ms");
+            System.out.println("Validity: True");
+            insAstarMisplaced.RetraceAndDiagnosePlan(insAstarMisplaced.goalFound);
+        } else {
+            System.out.println("Plan not found!");
+        }
+        System.out.println("\n=======================================\n");
+
+        System.out.println("=========== EHC (Manhattan) ==========\n");
+        startTime = System.currentTimeMillis();
+        insEHCManhattan.goalFound = SearchAlgorithms.FindEnforcedPlan(initialState,
+                SearchAlgorithms::ManhattanFunction);
+        endTime = System.currentTimeMillis(); // Record end time
+        insEHCManhattan.duration = endTime - startTime;
+
+        if (insEHCManhattan.goalFound != null) {
+            System.out.println("Plan found: " + insEHCManhattan.duration + "ms");
+            System.out.println("Validity: True");
+            insEHCManhattan.RetraceAndDiagnosePlan(insEHCManhattan.goalFound);
+        } else {
+            System.out.println("Plan not found!");
+        }
+        System.out.println("\n=======================================\n");
+
+        System.out.println("=========== EHC (Misplaced) ==========\n");
+        startTime = System.currentTimeMillis();
+        insEHCMisplaced.goalFound = SearchAlgorithms.FindEnforcedPlan(initialState,
+                SearchAlgorithms::MisplacedTiles);
+        endTime = System.currentTimeMillis(); // Record end time
+        insEHCMisplaced.duration = endTime - startTime;
+
+        if (insEHCMisplaced.goalFound != null) {
+            System.out.println("Plan found: " + insEHCMisplaced.duration + "ms");
+            System.out.println("Validity: True");
+            insEHCMisplaced.RetraceAndDiagnosePlan(insEHCMisplaced.goalFound);
         } else {
             System.out.println("Plan not found!");
         }
@@ -121,15 +160,13 @@ public class FindPlan {
 
         while (ancestor != null) {
             puzzleInstances.add(ancestor.puzzleStructure);
-            actions++;
-            validity = true;
+            actions++;;
             plan.add(ancestor.move);
             ancestor = ancestor.parent;
         }
 
         // Print plan receipt
         System.out.println("Actions: " + actions);
-        System.out.println("Validity: " + validity);
         System.out.println(plan);
 
         // while(!puzzleInstances.isEmpty())
