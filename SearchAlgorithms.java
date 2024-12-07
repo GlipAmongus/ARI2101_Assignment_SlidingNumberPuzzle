@@ -37,15 +37,19 @@ public class SearchAlgorithms {
     public static State FindGreedyPlan(State initialState, BiFunction<State, State, Integer> DistanceFunction) {
         State goalState = new State(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 0 }, null);
 
-        Heap<State> edgeStates = new Heap<>(100, StateComparators.byHeuristicCost);
+        PriorityQueue<State> edgeStates = new PriorityQueue<>(
+                (state1, state2) -> Integer.compare(state1.hCost, state2.hCost));
 
         HashSet<State> closedStates = new HashSet<>();
+        HashSet<State> inEdgeStates = new HashSet<>();
 
         edgeStates.add(initialState);
+        inEdgeStates.add(initialState);
 
-        while (edgeStates.size() > 0) { // traverse all edge States
-            State headState = edgeStates.removeFirst();
+        while (!edgeStates.isEmpty()) { // traverse all edge States
+            State headState = edgeStates.poll();
 
+            inEdgeStates.remove(headState);
             closedStates.add(headState);
 
             if (Arrays.equals(headState.puzzleStructure, goalState.puzzleStructure)) {
@@ -55,15 +59,17 @@ public class SearchAlgorithms {
             }
 
             for (State child : headState.children()) {
-                if (closedStates.contains(child) || edgeStates.contains(child))
+                if (closedStates.contains(child) || inEdgeStates.contains(child))
                     continue;
 
                 child.hCost = DistanceFunction.apply(child, goalState);
                 edgeStates.add(child);
+                inEdgeStates.add(child);
             }
         }
         return null;
     }
+
 
     // ================= A* Search ============================
     public static State FindAstarPlan(State initialState, BiFunction<State, State, Integer> DistanceFunction) {
@@ -86,7 +92,6 @@ public class SearchAlgorithms {
 
         while (!edgeStates.isEmpty()) { // traverse all edge States
             State headState = edgeStates.poll();
-            System.out.print(headState.hCost);
 
             inEdgeStates.remove(headState);
             closedStates.add(headState);
@@ -180,26 +185,14 @@ public class SearchAlgorithms {
         return cost;
     }
 
-    // this works
     public static Integer MisplacedTiles(State state, State destination) {
         int cost = 0;
         for (int i = 0; i < state.puzzleStructure.length; i++) {
             // If the value at position i in state is not the same as in destination
-            if (state.puzzleStructure[i] != destination.puzzleStructure[i]) {
+            if (state.puzzleStructure[i] != destination.puzzleStructure[i] && state.puzzleStructure[i] != 0) {
                 cost++;
             }
         }
         return cost;
     }
-    // This is old
-    // public static Integer MisplacedTiles(State state, State destination) {
-    //     int cost = 0;
-    //     for (int i = 1; i < 9; i++) {
-    //         if (state.puzzleStructure[i - 1] == i &&
-    //                 state.puzzleStructure[i - 1] != destination.puzzleStructure[i - 1])
-    //             cost++;
-    //     }
-    //     return cost;
-    // }
-
 }
