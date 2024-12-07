@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class State {
+public class State implements HeapItem<State> {
   public int[] puzzleStructure = new int[9]; // order of tiles
   public int emptyTileIndex; // Array index of zero (empty tile) (i.e. {1,2,3,4,5,6,7,8,0} eTI = 8)
 
@@ -12,6 +12,8 @@ public class State {
 
   public State parent; // Store state's parent state
 
+  private int heapIndex;
+
   public State(int[] puzzleStructure, State parent) {
     this.puzzleStructure = puzzleStructure;
     this.parent = parent;
@@ -21,6 +23,18 @@ public class State {
         break;
       }
     }
+  }
+
+  public int getHeapIndex(){
+    return heapIndex;
+  }
+
+  public void setHeapIndex(int heapIndex){
+    this.heapIndex = heapIndex;
+  }
+
+  public int compareTo(State other) {
+    return Integer.compare(other.hCost, this.hCost);
   }
 
   public boolean equals(Object obj) {
