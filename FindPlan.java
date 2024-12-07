@@ -5,7 +5,7 @@ import java.lang.System;
 public class FindPlan {
     // Plan Output
     public ArrayList<Character> plan; // list of moves done (l,u,r,d)
-                        // plan validity
+    public boolean validity; // plan validity
     public int actions; // length of the plan
     public int uniqueStates; // number of unique states gen. unexpanded included
 
@@ -13,6 +13,8 @@ public class FindPlan {
     public State goalFound; // final state returned by search
 
     public static void main(String[] args) {
+        State goalState = new State((new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 0}),null);
+
         FindPlan insBreadth = new FindPlan();
 
         FindPlan insGreedyManhattan = new FindPlan();
@@ -36,15 +38,14 @@ public class FindPlan {
         endTime = System.currentTimeMillis(); // Record end time
         insBreadth.duration = endTime - startTime;
 
-        if (insBreadth.goalFound != null) {
-            System.out.println("Plan found: " + insBreadth.duration + "ms");
-            System.out.println("Validity: True");
+        if (insBreadth.goalFound.equals(goalState)){
+            insBreadth.validity = true;
             insBreadth.RetraceAndDiagnosePlan(insBreadth.goalFound);
-        } else {
-            System.out.println("Plan not found!");
+        }else{
+            insBreadth.validity = false;
+            insBreadth.RetraceAndDiagnosePlan(insBreadth.goalFound);
         }
         System.out.println("\n=======================================\n");
-
 
         System.out.println("====== Greedy Search (Manhattan) =====\n");
         startTime = System.currentTimeMillis();
@@ -53,15 +54,15 @@ public class FindPlan {
         endTime = System.currentTimeMillis(); // Record end time
         insGreedyManhattan.duration = endTime - startTime;
 
-        if (insGreedyManhattan.goalFound != null) {
-            System.out.println("Plan found: " + insGreedyManhattan.duration + "ms");
-            System.out.println("Validity: True");
+        if (insGreedyManhattan.goalFound.equals(goalState)){
+            insGreedyManhattan.validity = true;
             insGreedyManhattan.RetraceAndDiagnosePlan(insGreedyManhattan.goalFound);
-        } else {
-            System.out.println("Plan not found!");
+        }else{
+            insGreedyManhattan.validity = false;
+            insGreedyManhattan.RetraceAndDiagnosePlan(insGreedyManhattan.goalFound);
         }
-        System.out.println("\n=======================================\n");
 
+        System.out.println("\n=======================================\n");
 
         System.out.println("====== Greedy Search (Misplaced) =====\n");
         startTime = System.currentTimeMillis();
@@ -70,15 +71,15 @@ public class FindPlan {
         endTime = System.currentTimeMillis(); // Record end time
         insGreedyMisplaced.duration = endTime - startTime;
 
-        if (insGreedyMisplaced.goalFound != null) {
-            System.out.println("Plan found: " + insGreedyMisplaced.duration + "ms");
-            System.out.println("Validity: True");
+        if (insGreedyMisplaced.goalFound.equals(goalState)){
+            insGreedyMisplaced.validity = true;
             insGreedyMisplaced.RetraceAndDiagnosePlan(insGreedyMisplaced.goalFound);
-        } else {
-            System.out.println("Plan not found!");
+        }else{
+            insGreedyMisplaced.validity = false;
+            insGreedyMisplaced.RetraceAndDiagnosePlan(insGreedyMisplaced.goalFound);
         }
-        System.out.println("\n=======================================\n");
 
+        System.out.println("\n=======================================\n");
 
         System.out.println("======== A* Search (Manhattan) =======\n");
         startTime = System.currentTimeMillis();
@@ -87,13 +88,14 @@ public class FindPlan {
         endTime = System.currentTimeMillis(); // Record end time
         insAstarManhattan.duration = endTime - startTime;
 
-        if (insAstarManhattan.goalFound != null) {
-            System.out.println("Plan found: " + insAstarManhattan.duration + "ms");
-            System.out.println("Validity: True");
+        if (insAstarManhattan.goalFound.equals(goalState)){
+            insAstarManhattan.validity = true;
             insAstarManhattan.RetraceAndDiagnosePlan(insAstarManhattan.goalFound);
-        } else {
-            System.out.println("Plan not found!");
+        }else{
+            insAstarManhattan.validity = false;
+            insAstarManhattan.RetraceAndDiagnosePlan(insAstarManhattan.goalFound);
         }
+
         System.out.println("\n=======================================\n");
 
         System.out.println("======== A* Search (Misplaced) =======\n");
@@ -103,13 +105,14 @@ public class FindPlan {
         endTime = System.currentTimeMillis(); // Record end time
         insAstarMisplaced.duration = endTime - startTime;
 
-        if (insAstarMisplaced.goalFound != null) {
-            System.out.println("Plan found: " + insAstarMisplaced.duration + "ms");
-            System.out.println("Validity: True");
+        if (insAstarMisplaced.goalFound.equals(goalState)){
+            insAstarMisplaced.validity = true;
             insAstarMisplaced.RetraceAndDiagnosePlan(insAstarMisplaced.goalFound);
-        } else {
-            System.out.println("Plan not found!");
+        }else{
+            insAstarMisplaced.validity = false;
+            insAstarMisplaced.RetraceAndDiagnosePlan(insAstarMisplaced.goalFound);
         }
+
         System.out.println("\n=======================================\n");
 
         System.out.println("=========== EHC (Manhattan) ==========\n");
@@ -119,13 +122,14 @@ public class FindPlan {
         endTime = System.currentTimeMillis(); // Record end time
         insEHCManhattan.duration = endTime - startTime;
 
-        if (insEHCManhattan.goalFound != null) {
-            System.out.println("Plan found: " + insEHCManhattan.duration + "ms");
-            System.out.println("Validity: True");
+        if (insEHCManhattan.goalFound.equals(goalState)){
+            insEHCManhattan.validity = true;
             insEHCManhattan.RetraceAndDiagnosePlan(insEHCManhattan.goalFound);
-        } else {
-            System.out.println("Plan not found!");
+        }else{
+            insEHCManhattan.validity = false;
+            insEHCManhattan.RetraceAndDiagnosePlan(insEHCManhattan.goalFound);
         }
+
         System.out.println("\n=======================================\n");
 
         System.out.println("=========== EHC (Misplaced) ==========\n");
@@ -135,15 +139,16 @@ public class FindPlan {
         endTime = System.currentTimeMillis(); // Record end time
         insEHCMisplaced.duration = endTime - startTime;
 
-        if (insEHCMisplaced.goalFound != null) {
-            System.out.println("Plan found: " + insEHCMisplaced.duration + "ms");
-            System.out.println("Validity: True");
+        if (insEHCMisplaced.goalFound.equals(goalState)){
+            insEHCMisplaced.validity = true;
             insEHCMisplaced.RetraceAndDiagnosePlan(insEHCMisplaced.goalFound);
-        } else {
-            System.out.println("Plan not found!");
+        }else{
+            insEHCMisplaced.validity = false;
+            insEHCMisplaced.RetraceAndDiagnosePlan(insEHCMisplaced.goalFound);
         }
+
         System.out.println("\n=======================================\n");
-        
+
     }
 
     // ================= Diagnostic Functions ============================
@@ -160,12 +165,15 @@ public class FindPlan {
 
         while (ancestor != null) {
             puzzleInstances.add(ancestor.puzzleStructure);
-            actions++;;
+            actions++;
+            ;
             plan.add(ancestor.move);
             ancestor = ancestor.parent;
         }
 
         // Print plan receipt
+        System.out.println("Duration: " + duration + "ms");
+        System.out.println("Validity: " + validity);
         System.out.println("Actions: " + actions);
         System.out.println(plan);
 
@@ -174,7 +182,7 @@ public class FindPlan {
 
     }
 
-    public static void PrintPuzzlePosition(int[] statePuzzlePostion) {
+    public void PrintPuzzlePosition(int[] statePuzzlePostion) {
         System.out.print("[");
         for (int i = 0; i < 9; i++) {
             switch (i) {
