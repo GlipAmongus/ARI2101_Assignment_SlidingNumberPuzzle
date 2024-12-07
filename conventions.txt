@@ -9,5 +9,10 @@ State definition and innerworkings    -> State class
 
 
 Problems
-try implementing heap
-astar isnt optimized but is admissable
+try implementing heap - heap implemented but since state map is generated at runtime states arent all uniquely classified
+
+try pre generated map:
+i) generate all states and allowed transitions
+ii) traverse map using search algorithms with heap
+
+much faster at runtime but larger unique state generation, plus assuming pre run map generated.
