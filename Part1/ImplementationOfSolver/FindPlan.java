@@ -26,9 +26,11 @@ public class FindPlan {
         FindPlan insEHCManhattan = new FindPlan();
         FindPlan insEHCMisplaced = new FindPlan();
 
+        State initialState = new State(new int[] { 8, 6, 7, 2, 5, 4, 3, 0, 1 },
+                null);
         // State initialState = new State(new int[] { 6, 4, 7, 8, 5, 0, 3, 2, 1 },
                 // null);
-        State initialState = new State(new int[] {1,2,3,4,5,0,6,7,8}, null);
+        // State initialState = new State(new int[] {1,2,3,4,5,0,6,7,8}, null);
 
         long startTime, endTime;
 
