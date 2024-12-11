@@ -1,4 +1,4 @@
-(define (problem problem1)
+(define (problem problem2)
     (:domain TilePuzzleSolver)
     (:objects 
         p1 p2 p3 - position              
@@ -6,7 +6,7 @@
     )
 
     (:init
-        
+
         (tile t1) (tile t2) (tile t3)
         (tile t4) (tile t5) (tile t6)
         (tile t7) (tile t8)
@@ -16,17 +16,17 @@
         (decrement p1 p2) (decrement p2 p3)
 
         
-        (pos t1 p1 p1) (pos t2 p2 p1) (pos t3 p3 p1)
-        (pos t4 p1 p2) (pos t6 p2 p2) (emptyPOS p3 p2)
-        (pos t7 p1 p3) (pos t5 p2 p3) (pos t8 p3 p3)
+        (pos t1 p1 p1) (emptyPOS p2 p1) (pos t2 p3 p1) 
+        (pos t4 p1 p2) (pos t5 p2 p2) (pos t3 p3 p2)
+        (pos t7 p1 p3) (pos t8 p2 p3) (pos t6 p3 p3)
 
-       
+        
         
     )
 
     (:goal 
         (and
-
+           
             (pos t1 p1 p1) (pos t2 p2 p1) (pos t3 p3 p1)
             (pos t4 p1 p2) (pos t5 p2 p2) (pos t6 p3 p2)
             (pos t7 p1 p3) (pos t8 p2 p3)
