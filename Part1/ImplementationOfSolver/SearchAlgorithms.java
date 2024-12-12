@@ -6,11 +6,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 public class SearchAlgorithms {
-    Result result;
+    public Result result;
     int[] goalStateStructure = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 0 };
 
     // ================= Breadth First Search ============================
-    public Result FindBreadthFirstPlan(State initialState) {
+    public void FindBreadthFirstPlan(State initialState) {
         long startTime = System.currentTimeMillis();
         State currentState = null;
 
@@ -27,7 +27,6 @@ public class SearchAlgorithms {
                 result.duration = endTime - startTime;
                 result.uniqueStatesCount = closedStates.size() + edgeStates.size();
                 result.retracePlan(currentState);
-                return result;
             }
 
             if (!closedStates.contains(currentState)) {
@@ -40,7 +39,6 @@ public class SearchAlgorithms {
         result.duration = endTime - startTime;
         result.uniqueStatesCount = closedStates.size() + edgeStates.size();
         result.retracePlan(currentState);
-        return result;
     }
 
     // ================= Greedy Search ============================
