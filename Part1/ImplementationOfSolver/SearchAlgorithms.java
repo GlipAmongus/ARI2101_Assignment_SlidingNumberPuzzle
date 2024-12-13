@@ -24,10 +24,7 @@ public class SearchAlgorithms {
             currentState = edgeStates.removeFirst();
 
             if (Arrays.equals(currentState.board, goalStateStructure)) {
-                long endTime = System.currentTimeMillis();
-                result.duration = endTime - startTime;
-                result.uniqueStatesCount = closedStates.size() + edgeStates.size();
-                result.retracePlan(currentState);
+                diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), currentState);
                 return result;
             }
 
@@ -37,10 +34,7 @@ public class SearchAlgorithms {
             }
         }
 
-        long endTime = System.currentTimeMillis();
-        result.duration = endTime - startTime;
-        result.uniqueStatesCount = closedStates.size() + edgeStates.size();
-        result.retracePlan(currentState);
+        diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), currentState);
         return result;
     }
 
@@ -66,10 +60,7 @@ public class SearchAlgorithms {
             closedStates.add(currentState);
 
             if (Arrays.equals(currentState.board, goalStateStructure)) {
-                long endTime = System.currentTimeMillis();
-                result.duration = endTime - startTime;
-                result.uniqueStatesCount = closedStates.size() + edgeStates.size();
-                result.retracePlan(currentState);
+                diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), currentState);
                 return result;
             }
 
@@ -84,10 +75,7 @@ public class SearchAlgorithms {
             }
         }
 
-        long endTime = System.currentTimeMillis();
-        result.duration = endTime - startTime;
-        result.uniqueStatesCount = closedStates.size() + edgeStates.size();
-        result.retracePlan(currentState);
+        diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), currentState);
         return result;
     }
 
@@ -119,10 +107,7 @@ public class SearchAlgorithms {
             closedStates.add(currentState);
 
             if (Arrays.equals(currentState.board, goalStateStructure)) {
-                long endTime = System.currentTimeMillis();
-                result.duration = endTime - startTime;
-                result.uniqueStatesCount = closedStates.size() + edgeStates.size();
-                result.retracePlan(currentState);
+                diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), currentState);
                 return result;
             }
 
@@ -148,10 +133,7 @@ public class SearchAlgorithms {
                 }
             }
         }
-        long endTime = System.currentTimeMillis();
-        result.duration = endTime - startTime;
-        result.uniqueStatesCount = closedStates.size() + edgeStates.size();
-        result.retracePlan(currentState);
+        diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), currentState);
         return result;
     }
 
@@ -174,10 +156,7 @@ public class SearchAlgorithms {
             closedStates.add(currentState);
 
             if (Arrays.equals(currentState.board, goalStateStructure)) {
-                long endTime = System.currentTimeMillis();
-                result.duration = endTime - startTime;
-                result.uniqueStatesCount = closedStates.size() + edgeStates.size();
-                result.retracePlan(currentState);
+                diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), bestState);
                 return result;
             }
 
@@ -199,10 +178,13 @@ public class SearchAlgorithms {
                 }
             }
         }
+        diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), bestState);
+        return result;
+    }
+    public void diagnosticHelper(long startTime, int closedSize, int edgeSize, State finalState){
         long endTime = System.currentTimeMillis();
         result.duration = endTime - startTime;
-        result.uniqueStatesCount = closedStates.size() + edgeStates.size();
-        result.retracePlan(bestState);
-        return result;
+        result.uniqueStatesCount = closedSize + edgeSize;
+        result.retracePlan(finalState);
     }
 }
