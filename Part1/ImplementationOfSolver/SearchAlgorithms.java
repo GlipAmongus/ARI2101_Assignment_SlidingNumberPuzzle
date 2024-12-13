@@ -194,6 +194,9 @@ public class SearchAlgorithms {
                     edgeStates.add(child);
                     inEdgeStates.add(child);
                     break;
+                } else {
+                    edgeStates.remove(child);
+                    edgeStates.add(child);
                 }
             }
         }
