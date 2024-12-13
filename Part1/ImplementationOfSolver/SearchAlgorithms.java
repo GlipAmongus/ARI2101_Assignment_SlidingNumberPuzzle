@@ -23,7 +23,7 @@ public class SearchAlgorithms {
         while (!edgeStates.isEmpty()) {
             currentState = edgeStates.removeFirst();
 
-            if (Arrays.equals(currentState.puzzleStructure, goalStateStructure)) {
+            if (Arrays.equals(currentState.board, goalStateStructure)) {
                 long endTime = System.currentTimeMillis();
                 result.duration = endTime - startTime;
                 result.uniqueStatesCount = closedStates.size() + edgeStates.size();
@@ -65,7 +65,7 @@ public class SearchAlgorithms {
             inEdgeStates.remove(currentState);
             closedStates.add(currentState);
 
-            if (Arrays.equals(currentState.puzzleStructure, goalStateStructure)) {
+            if (Arrays.equals(currentState.board, goalStateStructure)) {
                 long endTime = System.currentTimeMillis();
                 result.duration = endTime - startTime;
                 result.uniqueStatesCount = closedStates.size() + edgeStates.size();
@@ -78,7 +78,7 @@ public class SearchAlgorithms {
                 if (closedStates.contains(child) || inEdgeStates.contains(child))
                     continue;
 
-                child.hCost = DistanceFunction.apply(child.puzzleStructure, goalStateStructure);
+                child.hCost = DistanceFunction.apply(child.board, goalStateStructure);
                 edgeStates.add(child);
                 inEdgeStates.add(child);
             }
@@ -118,7 +118,7 @@ public class SearchAlgorithms {
             inEdgeStates.remove(currentState);
             closedStates.add(currentState);
 
-            if (Arrays.equals(currentState.puzzleStructure, goalStateStructure)) {
+            if (Arrays.equals(currentState.board, goalStateStructure)) {
                 long endTime = System.currentTimeMillis();
                 result.duration = endTime - startTime;
                 result.uniqueStatesCount = closedStates.size() + edgeStates.size();
@@ -133,10 +133,10 @@ public class SearchAlgorithms {
                     continue;
 
                 int CostToChild = currentState.gCost
-                        + DistanceFunction.apply(currentState.puzzleStructure, child.puzzleStructure);
+                        + DistanceFunction.apply(currentState.board, child.board);
                 if (CostToChild < child.gCost || !inEdgeStates.contains(child)) {
                     child.gCost = CostToChild;
-                    child.hCost = DistanceFunction.apply(child.puzzleStructure, goalStateStructure);
+                    child.hCost = DistanceFunction.apply(child.board, goalStateStructure);
 
                     if (!inEdgeStates.contains(child)) {
                         edgeStates.add(child);
@@ -166,14 +166,14 @@ public class SearchAlgorithms {
         HashSet<State> inEdgeStates = new HashSet<>();
 
         edgeStates.add(bestState);
-        bestState.hCost = DistanceFunction.apply(bestState.puzzleStructure, goalStateStructure);
+        bestState.hCost = DistanceFunction.apply(bestState.board, goalStateStructure);
 
         while (!edgeStates.isEmpty()) { // traverse all edge States
             State currentState = edgeStates.poll();
             inEdgeStates.remove(currentState);
             closedStates.add(currentState);
 
-            if (Arrays.equals(currentState.puzzleStructure, goalStateStructure)) {
+            if (Arrays.equals(currentState.board, goalStateStructure)) {
                 long endTime = System.currentTimeMillis();
                 result.duration = endTime - startTime;
                 result.uniqueStatesCount = closedStates.size() + edgeStates.size();
@@ -186,7 +186,7 @@ public class SearchAlgorithms {
                 if (closedStates.contains(child) && inEdgeStates.contains(child))
                     continue;
 
-                child.hCost = DistanceFunction.apply(child.puzzleStructure, goalStateStructure);
+                child.hCost = DistanceFunction.apply(child.board, goalStateStructure);
                 if (child.hCost < bestState.hCost) {
                     bestState = child;
                     edgeStates.clear();

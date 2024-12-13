@@ -56,7 +56,7 @@ public class Main {
     // ================= Main Method ============================
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
-        int searchOption = 0, hueristicOption = 0, testStatesCheck = 0;
+        int searchOption = 0, hueristicOption = 0, testStatesCheck = 0, displayBoardCheck = -1;
 
         Main searchInstance;
         String searchType;
@@ -88,6 +88,13 @@ public class Main {
             }
         }
 
+        System.out.println("\n--------- PRINT BOARD -----------");
+        System.out.println("Display board after each plan action: [1/0]");
+        while (displayBoardCheck < 0 || displayBoardCheck > 1) {
+            System.out.print("Enter Option: ");
+            displayBoardCheck = scn.nextInt();
+        }
+
         System.out.println("\n------ INITIAL TEST STATE -------");
         System.out.println("[[8,6,7],[2,5,4],[3,0,1]]:    [1]");
         System.out.println("[[6,4,7],[8,5,0],[3,2,1]]:    [2]");
@@ -115,7 +122,7 @@ public class Main {
                 searchInstance = new Main();
                 searchType = "BreadthFirst";
                 distanceFunction = null;
-                specificDiagnostic(searchInstance, searchType, distanceFunction, initialState);
+                specificDiagnostic(searchInstance, searchType, distanceFunction, initialState, displayBoardCheck);
                 break;
             case 2:
                 searchInstance = new Main();
@@ -126,7 +133,7 @@ public class Main {
                     searchType = "Greedy (Misplaced)";
                     distanceFunction = Hueristics::MisplacedTiles;
                 }
-                specificDiagnostic(searchInstance, searchType, distanceFunction, initialState);
+                specificDiagnostic(searchInstance, searchType, distanceFunction, initialState, displayBoardCheck);
                 break;
             case 3:
                 searchInstance = new Main();
@@ -137,7 +144,7 @@ public class Main {
                     searchType = "A* (Misplaced)";
                     distanceFunction = Hueristics::MisplacedTiles;
                 }
-                specificDiagnostic(searchInstance, searchType, distanceFunction, initialState);
+                specificDiagnostic(searchInstance, searchType, distanceFunction, initialState, displayBoardCheck);
                 break;
             case 4:
                 searchInstance = new Main();
@@ -148,7 +155,7 @@ public class Main {
                     searchType = "EHC (Misplaced)";
                     distanceFunction = Hueristics::MisplacedTiles;
                 }
-                specificDiagnostic(searchInstance, searchType, distanceFunction, initialState);
+                specificDiagnostic(searchInstance, searchType, distanceFunction, initialState, displayBoardCheck);
                 break;
             case 5:
                 Main[] searchInstances = new Main[7];
@@ -171,7 +178,7 @@ public class Main {
     }
 
     public static void specificDiagnostic(Main searchInstance, String searchType,
-            BiFunction<int[], int[], Integer> distanceFunction, State initialState) {
+            BiFunction<int[], int[], Integer> distanceFunction, State initialState, int display) {
 
         System.out.println("======== " + searchType + " ========\n");
         searchInstance.executeSearch(initialState, distanceFunction, searchType);
@@ -183,6 +190,46 @@ public class Main {
         System.out.println("Actions: " + searchInstance.result.actions);
         System.out.println("Plan: " + searchInstance.result.plan);
         System.out.println("\n=======================================\n");
+
+
+        if(display == 1){
+            State state = searchInstance.result.boards.pop();
+            State target = searchInstance.result.boards.pop();
+
+            for(int step = 0; step < searchInstance.result.actions; step++){
+                System.out.println("Move: "+ searchInstance.result.plan.get(step));
+
+                
+                for (int row = 0; row < 3; row++) {
+                    // Print the corresponding row from the first array
+                    System.out.print("[ ");
+                    for (int col = 0; col < 3; col++) {
+                        System.out.print(state.board[row * 3 + col] + " ");
+                    }
+                    if(row == 1){
+                        System.out.print("] -> [ ");
+                    } else {
+                        System.out.print("]    [ ");
+                    }
+
+        
+                    // Print the corresponding row from the second array
+                    for (int col = 0; col < 3; col++) {
+                        System.out.print(target.board[row * 3 + col] + " ");
+                    }
+                    System.out.print("]");
+
+        
+                    // Move to the next line
+                    System.out.println();
+                }
+                
+                state = target;
+                if(!searchInstance.result.boards.empty()){
+                    target = searchInstance.result.boards.pop();
+                }
+            }
+        }
     }
 
     public static void forAllDiagnostics(Main[] searchInstances, String[] searchTypes,

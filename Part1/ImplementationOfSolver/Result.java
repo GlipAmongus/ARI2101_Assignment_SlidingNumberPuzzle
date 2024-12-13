@@ -10,6 +10,7 @@ public class Result {
     public int uniqueStatesCount;
     public int generatedStatesCount;
 
+    public Stack<State> boards; // 
     public ArrayList<Character> plan; // list of moves done (l,u,r,d)
     public boolean validity; // plan validity
     public int actions; // length of the plan
@@ -22,23 +23,25 @@ public class Result {
     }
 
     public void retracePlan(State state) {
-        Stack<State> planInOrder = new Stack<>(); // stack to hold plan in correct order
+        boards = new Stack<>(); // stack to hold plan in correct order
         plan = new ArrayList<>();
 
         State ancestor = state.parent;
-        planInOrder.add(state);
+        boards.add(state);
         plan.add(state.move);
 
         while (ancestor != null) {
-            planInOrder.add(ancestor);
-            plan.add(ancestor.move);
+            boards.add(ancestor);
+            if(ancestor.parent != null){
+                plan.add(ancestor.move);
+            }
             actions++;
             ancestor = ancestor.parent;
         }
         Collections.reverse(plan);
 
         // ===================== Validation Step =========================
-        State currentState = planInOrder.peek();
+        State currentState = boards.peek();
         State simulatedState = currentState.clone();
 
         for (int i = 0; i < plan.size(); i++) {
@@ -67,15 +70,15 @@ public class Result {
             }
         }
         
-        if (Arrays.equals(simulatedState.puzzleStructure, new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 0 })) {
+        if (Arrays.equals(simulatedState.board, new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 0 })) {
             validity = true;
         }
     }
 
     public void Swap(State state, int shift) {
-        state.puzzleStructure[state.emptyTileIndex] = state.puzzleStructure[state.emptyTileIndex
+        state.board[state.emptyTileIndex] = state.board[state.emptyTileIndex
                 + shift];
-        state.puzzleStructure[state.emptyTileIndex + shift] = 0;
+        state.board[state.emptyTileIndex + shift] = 0;
         state.emptyTileIndex += shift;
     }
 }
