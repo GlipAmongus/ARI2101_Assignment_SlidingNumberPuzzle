@@ -88,13 +88,15 @@ public class Main {
             }
         }
 
-        System.out.println("\n--------- PRINT BOARD -----------");
-        System.out.println("Display board after each plan action: [1/0]");
-        while (displayBoardCheck < 0 || displayBoardCheck > 1) {
-            System.out.print("Enter Option: ");
-            displayBoardCheck = scn.nextInt();
+        if(searchOption != 5){
+            System.out.println("\n--------- PRINT BOARD -----------");
+            System.out.println("Display board after each plan action: [1/0]");
+            while (displayBoardCheck < 0 || displayBoardCheck > 1) {
+                System.out.print("Enter Option: ");
+                displayBoardCheck = scn.nextInt();
+            }
         }
-
+        
         System.out.println("\n------ INITIAL TEST STATE -------");
         System.out.println("[[8,6,7],[2,5,4],[3,0,1]]:    [1]");
         System.out.println("[[6,4,7],[8,5,0],[3,2,1]]:    [2]");
