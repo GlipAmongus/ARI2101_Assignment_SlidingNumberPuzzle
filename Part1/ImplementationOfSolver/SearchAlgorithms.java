@@ -169,7 +169,6 @@ public class SearchAlgorithms {
         bestState.hCost = DistanceFunction.apply(bestState.puzzleStructure, goalStateStructure);
 
         while (!edgeStates.isEmpty()) { // traverse all edge States
-            System.out.println(edgeStates.size());
             State currentState = edgeStates.poll();
             inEdgeStates.remove(currentState);
             closedStates.add(currentState);

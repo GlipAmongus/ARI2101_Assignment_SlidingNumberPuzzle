@@ -1,330 +1,20 @@
-INITIAL STATE 2:
-
-greedy has shortest plan?
-======== Breadth First Search ========
-
-unique: 181559
-Plan found: 586ms
-Validity: True
-Actions: 31
-[l, u, r, u, l, l, d, r, r, u, l, l, d, r, d, r, u, u, l, d, d, l, u, r, d, r, u, l, u, r, d, ]
-
-=======================================
-
-====== Greedy Search (Manhattan) =====
-
-unique: 181440
-Plan found: 160128ms
-Validity: True
-Actions: 31
-[u, l, l, d, r, r, u, u, l, l, d, r, d, r, u, u, l, l, d, r, d, r, u, u, l, l, d, d, r, r, u, ]
-
-=======================================
-
-====== Greedy Search (Misplaced) =====
-
-unique: 181438
-Plan found: 158440ms
-Validity: True
-Actions: 31
-[l, u, r, u, l, l, d, d, r, u, l, d, r, r, u, u, l, d, l, d, r, r, u, u, l, l, d, d, r, r, u, ]
-
-=======================================
-
-======== A* Search (Manhattan) =======
-
-unique: 178395
-Plan found: 597ms
-Validity: True
-Actions: 31
-[u, l, l, d, r, r, u, u, l, l, d, r, d, r, u, u, l, l, d, r, d, r, u, u, l, l, d, d, r, r, u, ]
-
-=======================================
-
-======== A* Search (Misplaced) =======
-
-unique: 181438
-Plan found: 591ms
-Validity: True
-Actions: 31
-[l, u, r, u, l, l, d, d, r, u, l, d, r, r, u, u, l, d, l, d, r, r, u, u, l, l, d, d, r, r, u, ]
-
-=======================================
-
-
-
-======== Breadth First Search ========
-
-unique: 181559
-Plan found: 500ms
-Validity: True
-Actions: 31
-[l, u, r, u, l, l, d, r, r, u, l, l, d, r, d, r, u, u, l, d, d, l, u, r, d, r, u, l, u, r, d, ]
-
-=======================================
-
-====== Greedy Search (Manhattan) =====
-
-unique: 147
-Plan found: 9ms
-Validity: True
-Actions: 47
-[l, l, u, r, d, r, u, l, l, d, r, u, r, d, l, l, u, r, r, d, l, u, r, u, l, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, l, l, d, d, r, r, u, ]
-
-=======================================
-
-====== Greedy Search (Misplaced) ===== PLAN OUTPUT Compressed
-
-unique: 139797
-Plan found: 232ms
-Validity: True
-Actions: 37051
-[u, l, u, ..., u, r, r, d, ]
-
-=======================================
-
-======== A* Search (Manhattan) =======
-
-unique: 178395
-Plan found: 735ms
-Validity: True
-Actions: 31
-[u, l, l, d, r, r, u, u, l, l, d, r, d, r, u, u, l, l, d, r, d, r, u, u, l, l, d, d, r, r, u, ]
-
-=======================================
-
-======== A* Search (Misplaced) =======
-
-unique: 181438
-Plan found: 698ms
-Validity: True
-Actions: 31
-[l, u, r, u, l, l, d, d, r, u, l, d, r, r, u, u, l, d, l, d, r, r, u, u, l, l, d, d, r, r, u, ]
-
-=======================================
-
-
-
-Alls working; Final Receipt - NOT TRUE ! MISPLACED NOT fixed yet
-
-======== Breadth First Search ========
-
-unique: 181559
-Plan found: 344ms
-Validity: True
-Actions: 31
-[l, u, r, u, l, l, d, r, r, u, l, l, d, r, d, r, u, u, l, d, d, l, u, r, d, r, u, l, u, r, d, ]
-
-=======================================
-
-====== Greedy Search (Manhattan) =====
-
-unique: 147
-Plan found: 9ms
-Validity: True
-Actions: 47
-[l, l, u, r, d, r, u, l, l, d, r, u, r, d, l, l, u, r, r, d, l, u, r, u, l, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, l, l, d, d, r, r, u, ]
-
-=======================================
-
-====== Greedy Search (Misplaced) ===== //PLAN OUTPUT COMPRESSED
-
-unique: 139797
-Plan found: 135ms
-Validity: True
-Actions: 37051
-[u, l, u, ..., u, r, r, d, ]
-
-=======================================
-
-======== A* Search (Manhattan) =======
-
-unique: 178395
-Plan found: 441ms
-Validity: True
-Actions: 31
-[u, l, l, d, r, r, u, u, l, l, d, r, d, r, u, u, l, l, d, r, d, r, u, u, l, l, d, d, r, r, u, ]
-
-=======================================
-
-======== A* Search (Misplaced) =======
-
-unique: 181438
-Plan found: 486ms
-Validity: True
-Actions: 31
-[l, u, r, u, l, l, d, d, r, u, l, d, r, r, u, u, l, d, l, d, r, r, u, u, l, l, d, d, r, r, u, ]
-
-=======================================
-
-=========== EHC (Manhattan) ==========
-
-unique: 3047
-Plan found: 11ms
-Validity: True
-Actions: 55
-[u, l, l, d, r, u, r, d, l, l, u, r, d, r, u, l, l, d, r, u, r, d, l, u, r, d, l, u, r, u, l, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, d, ] 
-
-=======================================
-
-=========== EHC (Misplaced) ==========
-
-unique: 262155
-Plan found: 2192ms
-Validity: True
-Actions: 31
-[l, u, r, u, l, l, d, r, r, u, l, l, d, r, d, r, u, u, l, d, d, l, u, r, d, r, u, l, u, r, d, ]
-
-=======================================
-TESTING ^^^
-
-INITIAL STATE 1: (Latest Version)
-
-======== Breadth First Search ========
-
-unique: 181601
-Duration: 426ms
-Validity: true
-Actions: 31
-[u, u, l, l, d, d, r, u, u, l, d, d, r, u, r, u, l, l, d, r, r, d, l, l, u, r, r, u, l, d, d, ]
-
-=======================================
-
-====== Greedy Search (Manhattan) =====
-
-unique: 190
-Duration: 10ms
-Validity: true
-Actions: 45
-[l, u, u, r, d, l, d, r, u, u, l, d, r, d, l, u, u, r, d, d, l, l, u, u, r, r, d, d, l, l, u, u, r, r, d, d, l, l, u, u, r, r, d, d, l, ]
-
-=======================================
-
-====== Greedy Search (Misplaced) =====
-
-unique: 1699
-Duration: 5ms
-Validity: true
-Actions: 149
-[u, l, l, u, r, d, r, u, l, l, d, r, u, r, d, l, l, u, r, d, l, u, r, r, d, d, l, u, u, r, d, d, l, u, r, d, l, u, r, u, l, d, l, u, r, r, d, d, l, u, l, d, r, r, u, u, l, d, l, d, r, u, l, d, r, u, u, r, d, d, l, u, r, u, l, d, d, r, u, u, l, d, r, d, l, l, u, u, r, d, l, d, r, u, l, u, r, d, d, r, u, l, l, u, r, r, d, d, l, u, u, l, d, r, d, r, u, u, l, l, d, r, d, l, u, r, r, d, l, l, u, r, d, l, u, u, r, r, d, d, l, l, u, u, r, r, d, d, l, ]
-
-=======================================
-
-======== A* Search (Manhattan) =======
-
-unique: 178391
-Duration: 500ms
-Validity: true
-Actions: 31
-[u, l, d, l, u, u, r, r, d, l, u, r, d, d, l, l, u, r, u, r, d, d, l, l, u, u, r, r, d, d, l, ]
-
-=======================================
-
-======== A* Search (Misplaced) =======
-
-unique: 181124
-Duration: 431ms
-Validity: true
-Actions: 31
-[l, u, u, r, d, d, l, l, u, u, r, d, r, d, l, l, u, u, r, d, r, d, l, l, u, u, r, r, d, d, l, ]
-
-=======================================
-
-=========== EHC (Manhattan) ==========
-
-unique: 2497
-Duration: 17ms
-Validity: true
-Actions: 45
-[l, u, u, l, d, d, r, r, u, l, d, l, u, u, r, r, d, d, u, l, d, l, u, u, r, r, d, d, l, l, u, u, r, r, d, d, l, l, u, u, r, r, d, d, l, ]
-
-=======================================
-
-=========== EHC (Misplaced) ==========
-
-unique: 3322
-Duration: 10ms
-Validity: true
-Actions: 59
-[u, l, l, d, r, u, r, d, l, l, u, r, r, u, l, d, r, d, l, u, u, r, d, l, l, u, r, d, l, d, r, u, u, l, d, d, r, r, u, l, d, l, u, r, r, d, l, u, u, l, d, r, d, u, r, u, l, d, d, ]
-
-=======================================
-
-INITIAL STATE 2:
-
-======== Breadth First Search ========
-
-unique: 181559
-Duration: 397ms
-Validity: true
-Actions: 31
-[l, u, r, u, l, l, d, r, r, u, l, l, d, r, d, r, u, u, l, d, d, l, u, r, d, r, u, l, u, r, d, ]
-
-=======================================
-
-====== Greedy Search (Manhattan) =====
-
-unique: 147
-Duration: 9ms
-Validity: true
-Actions: 47
-[l, l, u, r, d, r, u, l, l, d, r, u, r, d, l, l, u, r, r, d, l, u, r, u, l, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, l, l, d, d, r, r, u, ]
-
-=======================================
-
-====== Greedy Search (Misplaced) =====
-
-unique: 1202
-Duration: 10ms
-Validity: true
-Actions: 89
-[l, u, u, l, d, d, r, r, u, l, l, u, r, d, r, u, l, d, r, d, l, l, u, r, d, r, u, l, l, d, r, u, u, r, d, d, l, l, u, r, u, l, d, r, u, l, d, d, r, r, u, l, d, l, u, r, d, r, u, l, l, d, r, u, r, d, l, u, r, u, l, d, r, u, l, l, d, d, r, r, u, u, l, l, d, d, r, r, u, ]
-
-=======================================
-
-======== A* Search (Manhattan) =======
-
-unique: 178395
-Duration: 526ms
-Validity: true
-Actions: 31
-[u, l, l, d, r, r, u, u, l, l, d, r, d, r, u, u, l, l, d, r, d, r, u, u, l, l, d, d, r, r, u, ]
-
-=======================================
-
-======== A* Search (Misplaced) =======
-
-unique: 181117
-Duration: 441ms
-Validity: true
-Actions: 31
-[u, l, l, d, r, r, u, u, l, l, d, r, d, r, u, u, l, l, d, r, d, r, u, u, l, l, d, d, r, r, u, ]
-
-=======================================
-
-=========== EHC (Manhattan) ==========
-
-unique: 3047
-Duration: 11ms
-Validity: true
-Actions: 55
-[u, l, l, d, r, u, r, d, l, l, u, r, d, r, u, l, l, d, r, u, r, d, l, u, r, d, l, u, r, u, l, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, d, ] 
-
-=======================================
-
-=========== EHC (Misplaced) ==========
-
-unique: 1469
-Duration: 5ms
-Validity: true
-Actions: 55
-[l, u, u, r, d, l, d, r, u, u, l, d, d, l, u, r, u, l, d, d, r, r, u, u, l, d, r, d, l, u, u, l, d, d, r, u, l, u, r, d, d, u, r, u, l, d, d, r, u, l, l, u, r, d, r, ] 
-
-=======================================
+-------- SEARCH OPTIONS ---------
+Breadth First Search:         [1]
+Greedy Best First Search:     [2]
+A* Search:                    [3]
+Enforced Hill Climb Search:   [4]
+Perform All:                  [5]
+Enter Option: 5
+
+------ INITIAL TEST STATE -------
+[[8,6,7],[2,5,4],[3,0,1]]:    [1]
+[[6,4,7],[8,5,0],[3,2,1]]:    [2]
+[[1,2,3],[4,5,6],[8,7,0]]:    [3]
+Enter Option: 1
 
 ======== BreadthFirst ========
 
-Duration: 427ms
+Duration: 316ms
 Validity: true
 Unique States: 181601
 Generated States: 0
@@ -335,7 +25,7 @@ Plan: [, d, d, l, u, r, r, u, l, l, d, r, r, d, l, l, u, r, u, r, d, d, l, u, u,
 
 ======== Greedy (Manhattan) ========
 
-Duration: 6ms
+Duration: 4ms
 Validity: true
 Unique States: 190
 Generated States: 303
@@ -357,7 +47,7 @@ Plan: [, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, l, d, r, u, l, l, d, r, r,
 
 ======== A* (Manhattan) ========
 
-Duration: 552ms
+Duration: 470ms
 Validity: true
 Unique States: 178391
 Generated States: 457182
@@ -368,7 +58,7 @@ Plan: [, l, d, d, r, r, u, u, l, l, d, d, r, u, r, u, l, l, d, d, r, u, l, d, r,
 
 ======== A* (Misplaced) ========
 
-Duration: 622ms
+Duration: 351ms
 Validity: true
 Unique States: 181124
 Generated States: 479169
@@ -379,23 +69,23 @@ Plan: [, l, d, d, r, r, u, u, l, l, d, r, d, r, u, u, l, l, d, r, d, r, u, u, l,
 
 ======== EHC (Manhattan) ========
 
-Duration: 14ms
+Duration: 46ms
 Validity: true
-Unique States: 2497
-Generated States: 12370
-Actions: 45
-Plan: [, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, l, d, l, u, d, d, r, r, u, u, l, d, l, u, r, r, d, d, l, u, u, l]
+Unique States: 1543
+Generated States: 6381
+Actions: 51
+Plan: [, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, l, d, l, u, d, r, u, l, d, d, r, u, u, l, d, r, d, l, u, u, r, d, l, d, r, u, u, l]       
 
 =======================================
 
 ======== EHC (Misplaced) ========
 
-Duration: 14ms
+Duration: 58ms
 Validity: true
-Unique States: 3322
-Generated States: 15781
-Actions: 59
-Plan: [, d, d, l, u, r, u, d, r, d, l, u, u, l, d, r, r, u, l, d, l, u, r, r, d, d, l, u, u, r, d, l, d, r, u, l, l, d, r, u, u, l, d, r, d, l, u, r, r, u, l, l, d, r, u, r, d, l, l, u]
+Unique States: 2571
+Generated States: 10889
+Actions: 55
+Plan: [, d, d, l, u, r, u, d, r, d, l, u, u, l, d, r, r, u, l, d, l, u, r, r, d, d, l, u, u, r, d, l, d, r, u, d, l, l, u, r, d, r, u, l, l, d, r, u, u, l, d, r, d, l, u, u]
 
 =======================================
 
@@ -404,12 +94,12 @@ Plan: [, d, d, l, u, r, u, d, r, d, l, u, u, l, d, r, r, u, l, d, l, u, r, r, d,
 
 Algorithm            | Duration | Actions  | Unique States | Generated States
 -------------------------------------
-BreadthFirst         | 427ms    | 31       | 181601        | 0
-Greedy (Manhattan)   | 6ms      | 45       | 190           | 303
+BreadthFirst         | 316ms    | 31       | 181601        | 0
+Greedy (Manhattan)   | 4ms      | 45       | 190           | 303
 Greedy (Misplaced)   | 5ms      | 149      | 1699          | 2814
-A* (Manhattan)       | 552ms    | 31       | 178391        | 457182
-A* (Misplaced)       | 622ms    | 31       | 181124        | 479169
-EHC (Manhattan)      | 14ms     | 45       | 2497          | 12370        
-EHC (Misplaced)      | 14ms     | 59       | 3322          | 15781
+A* (Manhattan)       | 470ms    | 31       | 178391        | 457182
+A* (Misplaced)       | 351ms    | 31       | 181124        | 479169
+EHC (Manhattan)      | 46ms     | 51       | 1543          | 6381
+EHC (Misplaced)      | 58ms     | 55       | 2571          | 10889
 
 =====================================
