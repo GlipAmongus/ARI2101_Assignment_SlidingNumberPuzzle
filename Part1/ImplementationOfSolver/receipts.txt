@@ -103,3 +103,33 @@ EHC (Manhattan)      | 46ms     | 51       | 1543          | 6381
 EHC (Misplaced)      | 58ms     | 55       | 2571          | 10889
 
 =====================================
+
+
+
+============== Summary ============== ehc backtracking
+
+Algorithm            | Duration | Actions  | Unique States | Generated States
+-------------------------------------
+BreadthFirst         | 303ms    | 31       | 181601        | 0
+Greedy (Manhattan)   | 4ms      | 45       | 190           | 303
+Greedy (Misplaced)   | 6ms      | 149      | 1699          | 2814
+A* (Manhattan)       | 449ms    | 31       | 178391        | 457182
+A* (Misplaced)       | 374ms    | 31       | 181124        | 479169
+EHC (Manhattan)      | 76ms     | 32245    | 56620         | 92883
+EHC (Misplaced)      | 165ms    | 83185    | 144319        | 245319
+
+=====================================
+
+============== Summary ============== ehc backtracking + push equalstates 
+
+Algorithm            | Duration | Actions  | Unique States | Generated States
+-------------------------------------
+BreadthFirst         | 344ms    | 31       | 181601        | 0
+Greedy (Manhattan)   | 5ms      | 45       | 190           | 303
+Greedy (Misplaced)   | 2ms      | 149      | 1699          | 2814
+A* (Manhattan)       | 549ms    | 31       | 178391        | 457182
+A* (Misplaced)       | 411ms    | 31       | 181124        | 479169       
+EHC (Manhattan)      | 10ms     | 6235     | 10999         | 17850
+EHC (Misplaced)      | 3ms      | 935      | 1648          | 2666
+
+=====================================

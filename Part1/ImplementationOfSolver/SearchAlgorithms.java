@@ -1,6 +1,6 @@
 import java.util.LinkedList;
 import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.Stack;
 import java.util.function.BiFunction;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -137,51 +137,110 @@ public class SearchAlgorithms {
         return result;
     }
 
-    // ================= Enforced Hill Climb Search ============================
-    public Result FindEnforcedPlan(State initialState, BiFunction<int[], int[], Integer> DistanceFunction) {
+    // // ================= Enforced Hill Climb Search ============================
+    // public Result FindEnforcedPlan(State initialState, BiFunction<int[], int[], Integer> DistanceFunction) {
+    //     long startTime = System.currentTimeMillis();
+    //     State bestState = initialState;
+    //     result = new Result();
+
+    //     Queue<State> edgeStates = new LinkedList<>();
+    //     HashSet<State> closedStates = new HashSet<>();
+    //     HashSet<State> inEdgeStates = new HashSet<>();
+
+    //     edgeStates.add(bestState);
+    //     bestState.hCost = DistanceFunction.apply(bestState.board, goalStateStructure);
+
+    //     while (!edgeStates.isEmpty()) { // traverse all edge States
+    //         State currentState = edgeStates.poll();
+    //         inEdgeStates.remove(currentState);
+    //         closedStates.add(currentState);
+
+    //         if (Arrays.equals(currentState.board, goalStateStructure)) {
+    //             diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), bestState);
+    //             return result;
+    //         }
+
+    //         for (State child : currentState.children()) { // traverse all edge States
+    //             result.generatedStatesCount++;
+    //             if (closedStates.contains(child) && inEdgeStates.contains(child))
+    //                 continue;
+
+    //             child.hCost = DistanceFunction.apply(child.board, goalStateStructure);
+    //             if (child.hCost < bestState.hCost) {
+    //                 bestState = child;
+    //                 edgeStates.clear();
+    //                 edgeStates.add(child);
+    //                 inEdgeStates.add(child);
+    //                 break;
+    //             } else {
+    //                 edgeStates.remove(child);
+    //                 edgeStates.add(child);
+    //             }
+    //         }
+    //     }
+    //     diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), bestState);
+    //     return result;
+    // }
+
+    // ================= Enforced Hill Climb Search with Backtracking
+    // ============================
+    public Result FindEnforcedPlan(State initialState,
+            BiFunction<int[], int[], Integer> DistanceFunction) {
         long startTime = System.currentTimeMillis();
         State bestState = initialState;
         result = new Result();
 
-        Queue<State> edgeStates = new LinkedList<>();
-        HashSet<State> closedStates = new HashSet<>();
-        HashSet<State> inEdgeStates = new HashSet<>();
-
-        edgeStates.add(bestState);
+        Stack<State> stateStack = new Stack<>(); // Stack for backtracking
+        HashSet<State> closedStates = new HashSet<>(); // Closed set
         bestState.hCost = DistanceFunction.apply(bestState.board, goalStateStructure);
 
-        while (!edgeStates.isEmpty()) { // traverse all edge States
-            State currentState = edgeStates.poll();
-            inEdgeStates.remove(currentState);
+        stateStack.push(bestState);
+
+        while (!stateStack.isEmpty()) { 
+            State currentState = stateStack.pop();
             closedStates.add(currentState);
 
             if (Arrays.equals(currentState.board, goalStateStructure)) {
-                diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), bestState);
+                diagnosticHelper(startTime, closedStates.size(), stateStack.size(), currentState);
                 return result;
             }
 
-            for (State child : currentState.children()) { // traverse all edge States
+            boolean improved = false;
+            for (State child : currentState.children()) {
                 result.generatedStatesCount++;
-                if (closedStates.contains(child) && inEdgeStates.contains(child))
-                    continue;
+
+                if (closedStates.contains(child))
+                    continue; // Skip already explored states
 
                 child.hCost = DistanceFunction.apply(child.board, goalStateStructure);
+
                 if (child.hCost < bestState.hCost) {
                     bestState = child;
-                    edgeStates.clear();
-                    edgeStates.add(child);
-                    inEdgeStates.add(child);
-                    break;
-                } else {
-                    edgeStates.remove(child);
-                    edgeStates.add(child);
+                    stateStack.push(child); // Push the better state onto the stack
+                    improved = true;
+                    break; // Only explore the first improvement
+                } else if (child.hCost == bestState.hCost){
+                    bestState = child;
+                    stateStack.push(child); // Push non worse state onto the stack
+                    improved = true;
+                }
+            }
+
+            // If no improvement was made, backtrack by revisiting previous states
+            if (!improved) {
+                for (State child : currentState.children()) {
+                    if (!closedStates.contains(child)) {
+                        stateStack.push(child); // Revisit unexplored children
+                    }
                 }
             }
         }
-        diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), bestState);
+
+        diagnosticHelper(startTime, closedStates.size(), stateStack.size(), bestState);
         return result;
     }
-    public void diagnosticHelper(long startTime, int closedSize, int edgeSize, State finalState){
+
+    public void diagnosticHelper(long startTime, int closedSize, int edgeSize, State finalState) {
         long endTime = System.currentTimeMillis();
         result.duration = endTime - startTime;
         result.uniqueStatesCount = closedSize + edgeSize;
