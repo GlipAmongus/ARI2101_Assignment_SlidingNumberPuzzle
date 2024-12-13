@@ -321,3 +321,95 @@ Actions: 55
 [l, u, u, r, d, l, d, r, u, u, l, d, d, l, u, r, u, l, d, d, r, r, u, u, l, d, r, d, l, u, u, l, d, d, r, u, l, u, r, d, d, u, r, u, l, d, d, r, u, l, l, u, r, d, r, ] 
 
 =======================================
+
+======== BreadthFirst ========
+
+Duration: 427ms
+Validity: true
+Unique States: 181601
+Generated States: 0
+Actions: 31
+Plan: [, d, d, l, u, r, r, u, l, l, d, r, r, d, l, l, u, r, u, r, d, d, l, u, u, r, d, d, l, l, u, u]
+
+=======================================
+
+======== Greedy (Manhattan) ========
+
+Duration: 6ms
+Validity: true
+Unique States: 190
+Generated States: 303
+Actions: 45
+Plan: [, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, l, l, d, d, r, u, u, l, d, r, d, l, u, u, r, d, l, d, r, u, u, l]
+
+=======================================
+
+======== Greedy (Misplaced) ========
+
+Duration: 5ms
+Validity: true
+Unique States: 1699
+Generated States: 2814
+Actions: 149
+Plan: [, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, l, d, r, u, l, l, d, r, r, u, l, d, r, d, l, l, u, u, r, d, r, d, l, u, u, l, d, d, r, r, u, l, l, u, r, d, d, r, u, l, u, r, d, l, d, r, u, u, l, l, d, r, d, l, u, u, r, d, d, l, u, r, u, l, d, d, r, u, u, r, d, l, u, r, d, l, d, l, u, u, r, r, d, l, u, l, d, d, r, r, u, l, d, l, u, r, u, l, d, r, u, l, d, d, r, u, u, l, d, d, r, r, u, l, d, r, u, l, l, d, r, u, r, d, l, l, u, r, d, r, u, l, l, u]
+
+=======================================
+
+======== A* (Manhattan) ========
+
+Duration: 552ms
+Validity: true
+Unique States: 178391
+Generated States: 457182
+Actions: 31
+Plan: [, l, d, d, r, r, u, u, l, l, d, d, r, u, r, u, l, l, d, d, r, u, l, d, r, r, u, u, l, d, l, u]
+
+=======================================
+
+======== A* (Misplaced) ========
+
+Duration: 622ms
+Validity: true
+Unique States: 181124
+Generated States: 479169
+Actions: 31
+Plan: [, l, d, d, r, r, u, u, l, l, d, r, d, r, u, u, l, l, d, r, d, r, u, u, l, l, d, d, r, u, u, l]
+
+=======================================
+
+======== EHC (Manhattan) ========
+
+Duration: 14ms
+Validity: true
+Unique States: 2497
+Generated States: 12370
+Actions: 45
+Plan: [, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, l, l, d, d, r, r, u, u, l, d, l, u, d, d, r, r, u, u, l, d, l, u, r, r, d, d, l, u, u, l]
+
+=======================================
+
+======== EHC (Misplaced) ========
+
+Duration: 14ms
+Validity: true
+Unique States: 3322
+Generated States: 15781
+Actions: 59
+Plan: [, d, d, l, u, r, u, d, r, d, l, u, u, l, d, r, r, u, l, d, l, u, r, r, d, d, l, u, u, r, d, l, d, r, u, l, l, d, r, u, u, l, d, r, d, l, u, r, r, u, l, l, d, r, u, r, d, l, l, u]
+
+=======================================
+
+
+============== Summary ==============
+
+Algorithm            | Duration | Actions  | Unique States | Generated States
+-------------------------------------
+BreadthFirst         | 427ms    | 31       | 181601        | 0
+Greedy (Manhattan)   | 6ms      | 45       | 190           | 303
+Greedy (Misplaced)   | 5ms      | 149      | 1699          | 2814
+A* (Manhattan)       | 552ms    | 31       | 178391        | 457182
+A* (Misplaced)       | 622ms    | 31       | 181124        | 479169
+EHC (Manhattan)      | 14ms     | 45       | 2497          | 12370        
+EHC (Misplaced)      | 14ms     | 59       | 3322          | 15781
+
+=====================================

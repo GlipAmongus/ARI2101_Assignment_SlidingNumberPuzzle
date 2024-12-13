@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class State {
+public class State implements Cloneable {
   public int[] puzzleStructure = new int[9]; // order of tiles
   public int emptyTileIndex; // Array index of zero (empty tile) (i.e. {1,2,3,4,5,6,7,8,0} eTI = 8)
 
@@ -16,6 +16,20 @@ public class State {
     this.puzzleStructure = puzzleStructure;
     this.parent = parent;
     this.emptyTileIndex = emptyTileIndex;
+  }
+
+  protected State clone() {
+    try {
+      // Create a shallow copy
+      State cloned = (State) super.clone();
+
+      // Deep copy the puzzleStructure array
+      cloned.puzzleStructure = this.puzzleStructure.clone();
+
+      return cloned;
+    } catch (CloneNotSupportedException e) {
+      throw new AssertionError("Cloning not supported for State");
+    }
   }
 
   public boolean equals(Object obj) {
@@ -40,11 +54,10 @@ public class State {
     ArrayList<State> children = new ArrayList<>();
 
     if (emptyTileIndex - 3 >= 0) { // Precondition for down move
-      State child = new State(this.puzzleStructure.clone(), emptyTileIndex - 3, this);
-      child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex - 3]; // Swap zero and tile above
-      child.puzzleStructure[emptyTileIndex - 3] = 0;
+      State child = new State(this.puzzleStructure.clone(), emptyTileIndex, this);
 
-      child.emptyTileIndex = emptyTileIndex - 3;
+      Swap(child, -3);
+
       child.parent = this;
       child.move = 'd';
       child.gCost = this.gCost++;
@@ -52,11 +65,10 @@ public class State {
     }
 
     if (emptyTileIndex + 3 <= 8) { // Precondition for up move
-      State child = new State(this.puzzleStructure.clone(), emptyTileIndex + 3, this);
-      child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex + 3]; // Swap zero and tile below
-      child.puzzleStructure[emptyTileIndex + 3] = 0;
+      State child = new State(this.puzzleStructure.clone(), emptyTileIndex, this);
 
-      child.emptyTileIndex = emptyTileIndex + 3;
+      Swap(child, 3);
+
       child.parent = this;
       child.move = 'u';
       child.gCost = this.gCost++;
@@ -64,11 +76,10 @@ public class State {
     }
 
     if (emptyTileIndex % 3 == 0 || emptyTileIndex % 3 == 1) { // Precondition for left move
-      State child = new State(this.puzzleStructure.clone(), emptyTileIndex + 1, this);
-      child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex + 1]; // Swap zero and left tile
-      child.puzzleStructure[emptyTileIndex + 1] = 0;
+      State child = new State(this.puzzleStructure.clone(), emptyTileIndex, this);
 
-      child.emptyTileIndex = emptyTileIndex + 1;
+      Swap(child, 1);
+
       child.parent = this;
       child.move = 'l';
       child.gCost = this.gCost++;
@@ -76,11 +87,10 @@ public class State {
     }
 
     if (emptyTileIndex % 3 == 1 || emptyTileIndex % 3 == 2) { // Precondition for right move
-      State child = new State(this.puzzleStructure.clone(), emptyTileIndex-1, this);
-      child.puzzleStructure[emptyTileIndex] = this.puzzleStructure[emptyTileIndex - 1]; // Swap zero and right tile
-      child.puzzleStructure[emptyTileIndex - 1] = 0;
+      State child = new State(this.puzzleStructure.clone(), emptyTileIndex, this);
 
-      child.emptyTileIndex = emptyTileIndex - 1;
+      Swap(child, -1);
+
       child.parent = this;
       child.move = 'r';
       child.gCost = this.gCost++;
@@ -89,23 +99,10 @@ public class State {
     return children;
   }
 
-  // Count of misplaced tiles
-  public int misplacedTiles() {
-    int misplacedTiles = 0;
-    for (int i = 0; i < 8; i++) {
-      if (this.puzzleStructure[i] == i + 1) {
-        misplacedTiles++;
-      }
-    }
-    return misplacedTiles;
-  }
-
-  public boolean isEquals(State state) {
-    for (int i = 0; i < 9; i++) {
-      if (this.puzzleStructure[i] != state.puzzleStructure[i]) {
-        return false;
-      }
-    }
-    return true;
+  public void Swap(State state, int shift) {
+    state.puzzleStructure[state.emptyTileIndex] = state.puzzleStructure[state.emptyTileIndex
+        + shift];
+    state.puzzleStructure[state.emptyTileIndex + shift] = 0;
+    state.emptyTileIndex += shift;  
   }
 }

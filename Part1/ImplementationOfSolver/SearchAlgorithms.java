@@ -10,9 +10,10 @@ public class SearchAlgorithms {
     int[] goalStateStructure = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 0 };
 
     // ================= Breadth First Search ============================
-    public void FindBreadthFirstPlan(State initialState) {
+    public Result FindBreadthFirstPlan(State initialState) {
         long startTime = System.currentTimeMillis();
         State currentState = null;
+        result = new Result();
 
         LinkedList<State> edgeStates = new LinkedList<>();
         HashSet<State> closedStates = new HashSet<>();
@@ -27,6 +28,7 @@ public class SearchAlgorithms {
                 result.duration = endTime - startTime;
                 result.uniqueStatesCount = closedStates.size() + edgeStates.size();
                 result.retracePlan(currentState);
+                return result;
             }
 
             if (!closedStates.contains(currentState)) {
@@ -39,12 +41,14 @@ public class SearchAlgorithms {
         result.duration = endTime - startTime;
         result.uniqueStatesCount = closedStates.size() + edgeStates.size();
         result.retracePlan(currentState);
+        return result;
     }
 
     // ================= Greedy Search ============================
     public Result FindGreedyPlan(State initialState, BiFunction<int[], int[], Integer> DistanceFunction) {
         long startTime = System.currentTimeMillis();
         State currentState = null;
+        result = new Result();
 
         PriorityQueue<State> edgeStates = new PriorityQueue<>(
                 (state1, state2) -> Integer.compare(state1.hCost, state2.hCost));
@@ -91,6 +95,7 @@ public class SearchAlgorithms {
     public Result FindAstarPlan(State initialState, BiFunction<int[], int[], Integer> DistanceFunction) {
         long startTime = System.currentTimeMillis();
         State currentState = null;
+        result = new Result();
 
         PriorityQueue<State> edgeStates = new PriorityQueue<>(
                 (state1, state2) -> {
@@ -154,6 +159,7 @@ public class SearchAlgorithms {
     public Result FindEnforcedPlan(State initialState, BiFunction<int[], int[], Integer> DistanceFunction) {
         long startTime = System.currentTimeMillis();
         State bestState = initialState;
+        result = new Result();
 
         Queue<State> edgeStates = new LinkedList<>();
         HashSet<State> closedStates = new HashSet<>();
@@ -163,6 +169,7 @@ public class SearchAlgorithms {
         bestState.hCost = DistanceFunction.apply(bestState.puzzleStructure, goalStateStructure);
 
         while (!edgeStates.isEmpty()) { // traverse all edge States
+            System.out.println(edgeStates.size());
             State currentState = edgeStates.poll();
             inEdgeStates.remove(currentState);
             closedStates.add(currentState);
@@ -187,9 +194,6 @@ public class SearchAlgorithms {
                     edgeStates.add(child);
                     inEdgeStates.add(child);
                     break;
-                } else {
-                    edgeStates.add(child);
-                    inEdgeStates.add(child);
                 }
             }
         }

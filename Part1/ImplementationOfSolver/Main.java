@@ -11,34 +11,28 @@ public class Main {
         SearchAlgorithms searchAlgorithms = new SearchAlgorithms();
         switch(searchType) {
             case "BreadthFirst":
-                searchAlgorithms.FindBreadthFirstPlan(initialState);
+                result = searchAlgorithms.FindBreadthFirstPlan(initialState);
                 break;
             case "Greedy (Manhattan)":
-                searchAlgorithms.FindGreedyPlan(initialState, distanceFunction);
+                result = searchAlgorithms.FindGreedyPlan(initialState, distanceFunction);
                 break;
             case "Greedy (Misplaced)":
-                searchAlgorithms.FindGreedyPlan(initialState, distanceFunction);
+                result = searchAlgorithms.FindGreedyPlan(initialState, distanceFunction);
                 break;
             case "A* (Manhattan)":
-                searchAlgorithms.FindAstarPlan(initialState, distanceFunction);
+                result = searchAlgorithms.FindAstarPlan(initialState, distanceFunction);
                 break;
             case "A* (Misplaced)":
-                searchAlgorithms.FindAstarPlan(initialState, distanceFunction);
+                result = searchAlgorithms.FindAstarPlan(initialState, distanceFunction);
                 break;
             case "EHC (Manhattan)":
-                searchAlgorithms.FindEnforcedPlan(initialState, distanceFunction);
+                result = searchAlgorithms.FindEnforcedPlan(initialState, distanceFunction);
                 break;
             case "EHC (Misplaced)":
-                searchAlgorithms.FindEnforcedPlan(initialState, distanceFunction);
+                result = searchAlgorithms.FindEnforcedPlan(initialState, distanceFunction);
                 break;
         }
     }
-
-    // // Print plan receipt
-    // System.out.println("Duration: " + duration + "ms");
-    // System.out.println("Validity: " + validity);
-    // System.out.println("Actions: " + actions);
-    // System.out.println(plan);
 
     public void PrintPuzzlePosition(int[] statePuzzlePostion) {
         System.out.print("[");
@@ -61,9 +55,8 @@ public class Main {
     // ================= Main Method ============================
     public static void main(String[] args) {
         State initialState1 = new State(new int[] { 8, 6, 7, 2, 5, 4, 3, 0, 1 }, 7, null);
-        // State initialState2 = new State(new int[] { 6, 4, 7, 8, 5, 0, 3, 2, 1 }, 5,
-        // null);
-        // State unsolvableState = new State(new int[] { 1, 2, 3, 4, 5, 6, 8, 7, 0 }, 8
+        State initialState2 = new State(new int[] { 6, 4, 7, 8, 5, 0, 3, 2, 1 }, 5, null);
+        // State unsolvableState = new State(new int[] { 1, 2, 3, 4, 5, 6, 8, 7, 0 }, 8,
         // null);
 
         // Set up search algorithms
@@ -81,8 +74,8 @@ public class Main {
 
         // Execute and print results for each algorithm
         mainDiagnostics(searchInstances, searchTypes, distanceFunctions, initialState1);
-        // mainDiagnostics(searchInstances, searchTypes, distanceFunctions,
-        // initialState2);
+        mainDiagnostics(searchInstances, searchTypes, distanceFunctions,
+        initialState2);
         // mainDiagnostics(searchInstances, searchTypes, distanceFunctions,
         // unsolvableState);
 
@@ -94,6 +87,13 @@ public class Main {
             searchInstances[i] = new Main();
             System.out.println("======== " + searchTypes[i] + " ========\n");
             searchInstances[i].executeSearch(initialState, distanceFunctions.get(i), searchTypes[i]);
+            // // Print plan receipt
+            System.out.println("Duration: " + searchInstances[i].result.duration + "ms");
+            System.out.println("Validity: " + searchInstances[i].result.validity);
+            System.out.println("Unique States: " + searchInstances[i].result.uniqueStatesCount);
+            System.out.println("Generated States: " + searchInstances[i].result.generatedStatesCount);
+            System.out.println("Actions: " + searchInstances[i].result.actions);
+            System.out.println("Plan: " + searchInstances[i].result.plan);
             System.out.println("\n=======================================\n");
         }
 
