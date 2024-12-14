@@ -1,4 +1,10 @@
-Assignemnt for ARI2101
+Assignemnt for ARI2101<br />
+PART 1<br />
+Navigate to Part1 directory<br />
+To compile:<br />
+Run: javac -d bin src/*.java <br /><br />
+To run:<br />
+Run: java -cp bin Main<br />
 
 State Class
 The State class represents a state in the sliding puzzle
