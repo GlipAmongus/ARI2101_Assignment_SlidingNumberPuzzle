@@ -1,5 +1,5 @@
 public class DistanceFunctions {
-    
+
     // =============== Test Distance Functions ==========================
     public static void main(String[] args) {
         // Define sample states for testing
@@ -38,32 +38,41 @@ public class DistanceFunctions {
         }
 
         // Test Misplaced Tiles Distance
-        int misplacedTiles = DistanceFunctions.MisplacedTiles(initialState, goalState);
+        int misplacedTiles = MisplacedTiles(initialState, goalState);
         System.out.println("Misplaced Tiles Distance: " + misplacedTiles);
 
         // Test Manhattan Distance
-        int manhattanDistance = DistanceFunctions.Manhattan(initialState, goalState);
-        System.out.println("Manhattan Distance: " + manhattanDistance);
+        int manhattan = Manhattan(initialState, goalState);
+        System.out.println("Manhattan Distance: " + manhattan);
+
     }
 
     // ================= Distance Functions ============================
     public static Integer Manhattan(int[] state, int[] destination) {
         int cost = 0;
+        int[] goalPosition = new int[9]; // Lookup table for goal positions
+
+        // Precompute the goal positions
         for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                // Find distance between specific state and destination tiles
-                if (state[i] == destination[j] && state[i] != 0) {
-                    // co ords in array
-                    int stateX = j % 3, stateY = j / 3;
-                    int destX = i % 3, destY = i / 3;
+            goalPosition[destination[i]] = i;
+        }
 
-                    int distX = Math.abs(stateX - destX);
-                    int distY = Math.abs(stateY - destY);
+        // Calculate Manhattan distance
+        for (int i = 0; i < 9; i++) {
+            if (state[i] != 0) { // Skip the blank tile
+                int stateTile = state[i];
+                int goalIndex = goalPosition[stateTile];
 
-                    cost += distX + distY;
-                }
+                int stateX = i % 3, stateY = i / 3;
+                int destX = goalIndex % 3, destY = goalIndex / 3;
+
+                int distX = Math.abs(stateX - destX);
+                int distY = Math.abs(stateY - destY);
+
+                cost += distX + distY;
             }
         }
+
         return cost;
     }
 
