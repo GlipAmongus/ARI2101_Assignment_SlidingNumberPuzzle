@@ -188,7 +188,6 @@ public class Main {
         System.out.println("Duration: " + searchInstance.result.duration + "ms");
         System.out.println("Validity: " + searchInstance.result.validity);
         System.out.println("Unique States: " + searchInstance.result.uniqueStatesCount);
-        System.out.println("Generated States: " + searchInstance.result.generatedStatesCount);
         System.out.println("Actions: " + searchInstance.result.actions);
         System.out.println("Plan: " + searchInstance.result.plan);
         System.out.println("\n=======================================\n");
@@ -244,22 +243,19 @@ public class Main {
             System.out.println("Duration: " + searchInstances[i].result.duration + "ms");
             System.out.println("Validity: " + searchInstances[i].result.validity);
             System.out.println("Unique States: " + searchInstances[i].result.uniqueStatesCount);
-            System.out.println("Generated States: " + searchInstances[i].result.generatedStatesCount);
             System.out.println("Actions: " + searchInstances[i].result.actions);
             System.out.println("Plan: " + searchInstances[i].result.plan);
             System.out.println("\n=======================================\n");
         }
 
         System.out.println("\n============== Summary ==============\n");
-        System.out.printf("%-20s | %-8s | %-8s | %-13s | %-13s%n", "Algorithm", "Duration", "Actions", "Unique States",
-                "Generated States");
+        System.out.printf("%-20s | %-8s | %-8s | %-13s%n", "Algorithm", "Duration", "Actions", "Unique States");
         System.out.println("-------------------------------------");
 
         for (int i = 0; i < searchInstances.length; i++) {
-            System.out.printf("%-20s | %-8s | %-8d | %-13d | %-13d%n", searchTypes[i],
+            System.out.printf("%-20s | %-8s | %-8d | %-13d%n", searchTypes[i],
                     searchInstances[i].result.duration + "ms",
-                    searchInstances[i].result.actions, searchInstances[i].result.uniqueStatesCount,
-                    searchInstances[i].result.generatedStatesCount);
+                    searchInstances[i].result.actions, searchInstances[i].result.uniqueStatesCount);
         }
         System.out.println("\n=====================================\n");
     }

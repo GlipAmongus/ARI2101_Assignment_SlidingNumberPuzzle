@@ -2,12 +2,11 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Stack;
 import java.util.function.BiFunction;
-import java.util.Arrays;
 import java.util.HashSet;
 
 public class SearchAlgorithms {
     public Result result;
-    int[] goalStateStructure = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 0 };
+    State goalState = new State(new int[]{1,2,3,4,5,6,7,8,0}, 8, null);
 
     // ================= Breadth First Search ============================
     public Result FindBreadthFirstPlan(State initialState) {
@@ -23,7 +22,7 @@ public class SearchAlgorithms {
         while (!edgeStates.isEmpty()) {
             currentState = edgeStates.removeFirst();
 
-            if (Arrays.equals(currentState.board, goalStateStructure)) {
+            if (currentState.equals(goalState)) {
                 diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), currentState);
                 return result;
             }
@@ -59,17 +58,16 @@ public class SearchAlgorithms {
             inEdgeStates.remove(currentState);
             closedStates.add(currentState);
 
-            if (Arrays.equals(currentState.board, goalStateStructure)) {
+            if (currentState.equals(goalState)) {
                 diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), currentState);
                 return result;
             }
 
             for (State child : currentState.children()) {
-                result.generatedStatesCount++;
                 if (closedStates.contains(child) || inEdgeStates.contains(child))
                     continue;
 
-                child.hCost = DistanceFunction.apply(child.board, goalStateStructure);
+                child.hCost = DistanceFunction.apply(child.board, goalState.board);
                 edgeStates.add(child);
                 inEdgeStates.add(child);
             }
@@ -106,13 +104,12 @@ public class SearchAlgorithms {
             inEdgeStates.remove(currentState);
             closedStates.add(currentState);
 
-            if (Arrays.equals(currentState.board, goalStateStructure)) {
+            if (currentState.equals(goalState)) {
                 diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), currentState);
                 return result;
             }
 
             for (State child : currentState.children()) {
-                result.generatedStatesCount++;
 
                 if (closedStates.contains(child))
                     continue;
@@ -121,14 +118,11 @@ public class SearchAlgorithms {
                         + DistanceFunction.apply(currentState.board, child.board);
                 if (CostToChild < child.gCost || !inEdgeStates.contains(child)) {
                     child.gCost = CostToChild;
-                    child.hCost = DistanceFunction.apply(child.board, goalStateStructure);
+                    child.hCost = DistanceFunction.apply(child.board, goalState.board);
 
                     if (!inEdgeStates.contains(child)) {
                         edgeStates.add(child);
                         inEdgeStates.add(child);
-                    } else {
-                        edgeStates.remove(child);
-                        edgeStates.add(child);
                     }
                 }
             }
@@ -161,7 +155,6 @@ public class SearchAlgorithms {
     //         }
 
     //         for (State child : currentState.children()) { // traverse all edge States
-    //             result.generatedStatesCount++;
     //             if (closedStates.contains(child) && inEdgeStates.contains(child))
     //                 continue;
 
@@ -192,7 +185,8 @@ public class SearchAlgorithms {
 
         Stack<State> stateStack = new Stack<>(); // Stack for backtracking
         HashSet<State> closedStates = new HashSet<>(); // Closed set
-        bestState.hCost = DistanceFunction.apply(bestState.board, goalStateStructure);
+
+        bestState.hCost = DistanceFunction.apply(bestState.board, goalState.board);
 
         stateStack.push(bestState);
 
@@ -200,19 +194,18 @@ public class SearchAlgorithms {
             State currentState = stateStack.pop();
             closedStates.add(currentState);
 
-            if (Arrays.equals(currentState.board, goalStateStructure)) {
+            if (currentState.equals(goalState)) {
                 diagnosticHelper(startTime, closedStates.size(), stateStack.size(), currentState);
                 return result;
             }
 
             boolean improved = false;
             for (State child : currentState.children()) {
-                result.generatedStatesCount++;
 
                 if (closedStates.contains(child))
                     continue; // Skip already explored states
 
-                child.hCost = DistanceFunction.apply(child.board, goalStateStructure);
+                child.hCost = DistanceFunction.apply(child.board, goalState.board);
 
                 if (child.hCost < bestState.hCost) {
                     bestState = child;

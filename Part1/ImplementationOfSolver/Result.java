@@ -8,7 +8,6 @@ public class Result {
     public State lastState; // Last state search algorithm looked at
 
     public int uniqueStatesCount;
-    public int generatedStatesCount;
 
     public Stack<State> boards; // 
     public ArrayList<Character> plan; // list of moves done (l,u,r,d)
@@ -18,7 +17,6 @@ public class Result {
     public long duration; // time taken to execute
 
     public Result() {
-        this.generatedStatesCount = 0;
         this.validity = false;
     }
 
