@@ -1,5 +1,6 @@
 import java.util.LinkedList;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Stack;
 import java.util.function.BiFunction;
 import java.util.HashSet;
@@ -14,22 +15,29 @@ public class SearchAlgorithms {
         State currentState = null;
         result = new Result();
 
-        LinkedList<State> edgeStates = new LinkedList<>();
+        Queue<State> edgeStates = new LinkedList<>();
         HashSet<State> closedStates = new HashSet<>();
+        HashSet<State> inEdgeStates = new HashSet<>();
 
         edgeStates.add(initialState);
 
         while (!edgeStates.isEmpty()) {
-            currentState = edgeStates.removeFirst();
+            currentState = edgeStates.poll();
+            inEdgeStates.remove(currentState);
+            closedStates.add(currentState);
+            
 
             if (currentState.equals(goalState)) {
                 diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), currentState);
                 return result;
             }
 
-            if (!closedStates.contains(currentState)) {
-                closedStates.add(currentState);
-                edgeStates.addAll(currentState.children());
+            for (State child : currentState.children()) {
+                if (closedStates.contains(child) || inEdgeStates.contains(child))
+                    continue;
+
+                edgeStates.offer(child);
+                inEdgeStates.add(child);
             }
         }
 
