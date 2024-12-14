@@ -130,10 +130,10 @@ public class Main {
                 searchInstance = new Main();
                 if (hueristicOption == 1) {
                     searchType = "Greedy (Manhattan)";
-                    distanceFunction = Hueristics::ManhattanFunction;
+                    distanceFunction = DistanceFunctions::Manhattan;
                 } else {
                     searchType = "Greedy (Misplaced)";
-                    distanceFunction = Hueristics::MisplacedTiles;
+                    distanceFunction = DistanceFunctions::MisplacedTiles;
                 }
                 specificDiagnostic(searchInstance, searchType, distanceFunction, initialState, displayBoardCheck);
                 break;
@@ -141,10 +141,10 @@ public class Main {
                 searchInstance = new Main();
                 if (hueristicOption == 1) {
                     searchType = "A* (Manhattan)";
-                    distanceFunction = Hueristics::ManhattanFunction;
+                    distanceFunction = DistanceFunctions::Manhattan;
                 } else {
                     searchType = "A* (Misplaced)";
-                    distanceFunction = Hueristics::MisplacedTiles;
+                    distanceFunction = DistanceFunctions::MisplacedTiles;
                 }
                 specificDiagnostic(searchInstance, searchType, distanceFunction, initialState, displayBoardCheck);
                 break;
@@ -152,10 +152,10 @@ public class Main {
                 searchInstance = new Main();
                 if (hueristicOption == 1) {
                     searchType = "EHC (Manhattan)";
-                    distanceFunction = Hueristics::ManhattanFunction;
+                    distanceFunction = DistanceFunctions::Manhattan;
                 } else {
                     searchType = "EHC (Misplaced)";
-                    distanceFunction = Hueristics::MisplacedTiles;
+                    distanceFunction = DistanceFunctions::MisplacedTiles;
                 }
                 specificDiagnostic(searchInstance, searchType, distanceFunction, initialState, displayBoardCheck);
                 break;
@@ -166,12 +166,12 @@ public class Main {
                         "A* (Misplaced)", "EHC (Manhattan)", "EHC (Misplaced)" };
                 List<BiFunction<int[], int[], Integer>> distanceFunctions = new ArrayList<>();
                 distanceFunctions.add(null); // Breadth-First doesn't need a heuristic function
-                distanceFunctions.add(Hueristics::ManhattanFunction);
-                distanceFunctions.add(Hueristics::MisplacedTiles);
-                distanceFunctions.add(Hueristics::ManhattanFunction);
-                distanceFunctions.add(Hueristics::MisplacedTiles);
-                distanceFunctions.add(Hueristics::ManhattanFunction);
-                distanceFunctions.add(Hueristics::MisplacedTiles);
+                distanceFunctions.add(DistanceFunctions::Manhattan);
+                distanceFunctions.add(DistanceFunctions::MisplacedTiles);
+                distanceFunctions.add(DistanceFunctions::Manhattan);
+                distanceFunctions.add(DistanceFunctions::MisplacedTiles);
+                distanceFunctions.add(DistanceFunctions::Manhattan);
+                distanceFunctions.add(DistanceFunctions::MisplacedTiles);
                 forAllDiagnostics(searchInstances, searchTypes, distanceFunctions,
                         initialState);
                 break;
@@ -194,18 +194,19 @@ public class Main {
 
 
         if(display == 1){
-            State state = searchInstance.result.boards.pop();
-            State target = searchInstance.result.boards.pop();
+            int[] current = searchInstance.result.boards.pop();
+            int[] target = searchInstance.result.boards.pop();
+            char move = searchInstance.result.plan.pop();
 
             for(int step = 0; step < searchInstance.result.actions; step++){
-                System.out.println("Move: "+ searchInstance.result.plan.get(step));
+                System.out.println("Move: "+ move + "   | Action: "+ (step+1));
 
                 
                 for (int row = 0; row < 3; row++) {
                     // Print the corresponding row from the first array
                     System.out.print("[ ");
                     for (int col = 0; col < 3; col++) {
-                        System.out.print(state.board[row * 3 + col] + " ");
+                        System.out.print(current[row * 3 + col] + " ");
                     }
                     if(row == 1){
                         System.out.print("] -> [ ");
@@ -216,7 +217,7 @@ public class Main {
         
                     // Print the corresponding row from the second array
                     for (int col = 0; col < 3; col++) {
-                        System.out.print(target.board[row * 3 + col] + " ");
+                        System.out.print(target[row * 3 + col] + " ");
                     }
                     System.out.print("]");
 
@@ -225,9 +226,10 @@ public class Main {
                     System.out.println();
                 }
                 
-                state = target;
+                current = target;
                 if(!searchInstance.result.boards.empty()){
                     target = searchInstance.result.boards.pop();
+                    move = searchInstance.result.plan.pop();
                 }
             }
         }
@@ -259,5 +261,4 @@ public class Main {
         }
         System.out.println("\n=====================================\n");
     }
-
 }
