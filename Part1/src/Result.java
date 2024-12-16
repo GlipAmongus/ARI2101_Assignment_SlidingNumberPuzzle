@@ -1,11 +1,13 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
+import java.util.Collections;
 
 public class Result {
     public Stack<int[]> boards; // boards accessed in plan
 
     // Plan Output
-    public Stack<Character> plan; // list of moves done (l,u,r,d)
+    public ArrayList<Character> plan; // list of moves done (l,u,r,d)
     public boolean validity; // plan validity
     public int actions; // length of the plan
     public int uniqueStatesCount; // number of unique states generated including unopened states
@@ -13,21 +15,22 @@ public class Result {
 
     public void retracePlan(State state) {
         boards = new Stack<>(); // stack to hold plan in correct order
-        plan = new Stack<>();
+        plan = new ArrayList<>();
 
         // ====================== Retrace Step ==========================
         State ancestor = state.parent;
         boards.push(state.board);
-        plan.push(state.move);
+        plan.add(state.move);
 
         while (ancestor != null) {
             boards.push(ancestor.board);
             if (ancestor.parent != null) {
-                plan.push(ancestor.move);
+                plan.add(ancestor.move);
             }
             actions++;
             ancestor = ancestor.parent;
         }
+        Collections.reverse(plan);
 
         // ===================== Validation Step =========================
         int[] simBoard = boards.peek().clone();

@@ -7,7 +7,7 @@ import java.util.HashSet;
 
 public class SearchAlgorithms {
     public Result result;
-    State goalState = new State(new int[]{1,2,3,4,5,6,7,8,0}, 8, null);
+    State goalState = new State(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 0 }, 8, null);
 
     // ================= Breadth First Search ============================
     public Result FindBreadthFirstPlan(State initialState) {
@@ -25,7 +25,6 @@ public class SearchAlgorithms {
             currentState = edgeStates.poll();
             inEdgeStates.remove(currentState);
             closedStates.add(currentState);
-            
 
             if (currentState.equals(goalState)) {
                 diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), currentState);
@@ -119,69 +118,20 @@ public class SearchAlgorithms {
 
             for (State child : currentState.children()) {
 
-                if (closedStates.contains(child))
+                if (closedStates.contains(child) || inEdgeStates.contains(child))
                     continue;
 
-                int CostToChild = currentState.gCost
+                child.gCost = currentState.gCost
                         + DistanceFunction.apply(currentState.board, child.board);
-                if (CostToChild < child.gCost || !inEdgeStates.contains(child)) {
-                    child.gCost = CostToChild;
-                    child.hCost = DistanceFunction.apply(child.board, goalState.board);
+                child.hCost = DistanceFunction.apply(child.board, goalState.board);
 
-                    if (!inEdgeStates.contains(child)) {
-                        edgeStates.add(child);
-                        inEdgeStates.add(child);
-                    }
-                }
+                edgeStates.add(child);
+                inEdgeStates.add(child);
             }
         }
         diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), currentState);
         return result;
     }
-
-    // // ================= Enforced Hill Climb Search ============================
-    // public Result FindEnforcedPlan(State initialState, BiFunction<int[], int[], Integer> DistanceFunction) {
-    //     long startTime = System.currentTimeMillis();
-    //     State bestState = initialState;
-    //     result = new Result();
-
-    //     Queue<State> edgeStates = new LinkedList<>();
-    //     HashSet<State> closedStates = new HashSet<>();
-    //     HashSet<State> inEdgeStates = new HashSet<>();
-
-    //     edgeStates.add(bestState);
-    //     bestState.hCost = DistanceFunction.apply(bestState.board, goalStateStructure);
-
-    //     while (!edgeStates.isEmpty()) { // traverse all edge States
-    //         State currentState = edgeStates.poll();
-    //         inEdgeStates.remove(currentState);
-    //         closedStates.add(currentState);
-
-    //         if (Arrays.equals(currentState.board, goalStateStructure)) {
-    //             diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), bestState);
-    //             return result;
-    //         }
-
-    //         for (State child : currentState.children()) { // traverse all edge States
-    //             if (closedStates.contains(child) && inEdgeStates.contains(child))
-    //                 continue;
-
-    //             child.hCost = DistanceFunction.apply(child.board, goalStateStructure);
-    //             if (child.hCost < bestState.hCost) {
-    //                 bestState = child;
-    //                 edgeStates.clear();
-    //                 edgeStates.add(child);
-    //                 inEdgeStates.add(child);
-    //                 break;
-    //             } else {
-    //                 edgeStates.remove(child);
-    //                 edgeStates.add(child);
-    //             }
-    //         }
-    //     }
-    //     diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), bestState);
-    //     return result;
-    // }
 
     // ================= Enforced Hill Climb Search with Backtracking
     // ============================
@@ -198,7 +148,7 @@ public class SearchAlgorithms {
 
         stateStack.push(bestState);
 
-        while (!stateStack.isEmpty()) { 
+        while (!stateStack.isEmpty()) {
             State currentState = stateStack.pop();
             closedStates.add(currentState);
 
@@ -220,7 +170,7 @@ public class SearchAlgorithms {
                     stateStack.push(child); // Push the better state onto the stack
                     improved = true;
                     break; // Only explore the first improvement
-                } else if (child.hCost == bestState.hCost){
+                } else if (child.hCost == bestState.hCost) {
                     bestState = child;
                     stateStack.push(child); // Push non worse state onto the stack
                     improved = true;

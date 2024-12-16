@@ -88,7 +88,7 @@ public class Main {
             }
         }
 
-        if(searchOption != 5){
+        if (searchOption != 5) {
             System.out.println("\n--------- PRINT BOARD -----------");
             System.out.println("Display board after each plan action: [1/0]");
             while (displayBoardCheck < 0 || displayBoardCheck > 1) {
@@ -96,7 +96,7 @@ public class Main {
                 displayBoardCheck = scn.nextInt();
             }
         }
-        
+
         System.out.println("\n------ INITIAL TEST STATE -------");
         System.out.println("[[8,6,7],[2,5,4],[3,0,1]]:    [1]");
         System.out.println("[[6,4,7],[8,5,0],[3,2,1]]:    [2]");
@@ -106,7 +106,6 @@ public class Main {
             testStatesCheck = scn.nextInt();
         }
         System.out.println();
-
 
         switch (testStatesCheck) {
             case 1:
@@ -119,6 +118,7 @@ public class Main {
                 initialState = new State(new int[] { 1, 2, 3, 4, 5, 6, 8, 7, 0 }, 8, null);
                 break;
         }
+        // initialState = new State(new int[] { 1, 2, 3, 4, 6, 5, 7, 8, 0 }, 8, null);
         switch (searchOption) {
             case 1:
                 searchInstance = new Main();
@@ -192,44 +192,39 @@ public class Main {
         System.out.println("Plan: " + searchInstance.result.plan);
         System.out.println("\n=======================================\n");
 
-
-        if(display == 1){
+        if (display == 1) {
             int[] current = searchInstance.result.boards.pop();
             int[] target = searchInstance.result.boards.pop();
-            char move = searchInstance.result.plan.pop();
 
-            for(int step = 0; step < searchInstance.result.actions; step++){
-                System.out.println("Move: "+ move + "   | Action: "+ (step+1));
+            for (int step = 0; step < searchInstance.result.actions; step++) {
+                System.out.println("Move: " + searchInstance.result.plan.get(step)
+                        + "   | Action: " + (step + 1));
 
-                
                 for (int row = 0; row < 3; row++) {
                     // Print the corresponding row from the first array
                     System.out.print("[ ");
                     for (int col = 0; col < 3; col++) {
                         System.out.print(current[row * 3 + col] + " ");
                     }
-                    if(row == 1){
+                    if (row == 1) {
                         System.out.print("] -> [ ");
                     } else {
                         System.out.print("]    [ ");
                     }
 
-        
                     // Print the corresponding row from the second array
                     for (int col = 0; col < 3; col++) {
                         System.out.print(target[row * 3 + col] + " ");
                     }
                     System.out.print("]");
 
-        
                     // Move to the next line
                     System.out.println();
                 }
-                
+
                 current = target;
-                if(!searchInstance.result.boards.empty()){
+                if (!searchInstance.result.boards.empty()) {
                     target = searchInstance.result.boards.pop();
-                    move = searchInstance.result.plan.pop();
                 }
             }
         }
