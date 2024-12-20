@@ -4,6 +4,8 @@ import java.util.Scanner;
 import java.util.concurrent.*;
 import java.util.function.BiFunction;
 import java.lang.System;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Main {
     public Result result;
@@ -133,28 +135,34 @@ public class Main {
                 System.out.print("Enter Option: ");
                 displayBoardCheck = scn.nextInt();
             }
-        }
 
-        System.out.println("\n------ INITIAL TEST STATE -------");
-        System.out.println("[[8,6,7],[2,5,4],[3,0,1]]:    [1]");
-        System.out.println("[[6,4,7],[8,5,0],[3,2,1]]:    [2]");
-        System.out.println("[[1,2,3],[4,5,6],[8,7,0]]:    [3]");
-        System.out.println("[Custom Board]:               [4]");
-        while (testStatesCheck < 1 || testStatesCheck > 4) {
-            System.out.print("Enter Option: ");
-            testStatesCheck = scn.nextInt();
+            System.out.println("\n------ INITIAL TEST STATE -------");
+            System.out.println("[[8,6,7],[2,5,4],[3,0,1]]:    [1]");
+            System.out.println("[[6,4,7],[8,5,0],[3,2,1]]:    [2]");
+            System.out.println("[[1,2,3],[4,5,6],[8,7,0]]:    [3]");
+            System.out.println("[Custom Board]:               [4]");
+            while (testStatesCheck < 1 || testStatesCheck > 4) {
+                System.out.print("Enter Option: ");
+                testStatesCheck = scn.nextInt();
+            }
+            System.out.println();
         }
-        System.out.println();
 
         switch (testStatesCheck) {
             case 1:
                 initialState = new State(new int[] { 8, 6, 7, 2, 5, 4, 3, 0, 1 }, 7, null);
+                System.out.println("\nINITIAL BOARD:");
+                PrintBoard(initialState.board);
                 break;
             case 2:
                 initialState = new State(new int[] { 6, 4, 7, 8, 5, 0, 3, 2, 1 }, 5, null);
+                System.out.println("\nINITIAL BOARD:");
+                PrintBoard(initialState.board);
                 break;
             case 3:
                 initialState = new State(new int[] { 1, 2, 3, 4, 5, 6, 8, 7, 0 }, 8, null);
+                System.out.println("\nINITIAL BOARD:");
+                PrintBoard(initialState.board);
                 break;
             case 4:
                 int[] customBoard = new int[9];
@@ -190,11 +198,13 @@ public class Main {
                 }
                 System.out.println();
                 initialState = new State(customBoard, emptyTileIndex, null);
+
+                System.out.println("\nINITIAL BOARD:");
+                PrintBoard(initialState.board);
+                break;
+            default:
                 break;
         }
-
-        System.out.println("\nINITIAL BOARD:");
-        PrintBoard(initialState.board);
 
         switch (searchOption) {
             case 1:
@@ -249,8 +259,54 @@ public class Main {
                 distanceFunctions.add(DistanceFunctions::MisplacedTiles);
                 distanceFunctions.add(DistanceFunctions::Manhattan);
                 distanceFunctions.add(DistanceFunctions::MisplacedTiles);
-                forAllDiagnostics(searchInstances, searchTypes, distanceFunctions,
-                        initialState);
+
+                try (FileWriter writer = new FileWriter("results.csv")) {
+                    writer.append("Strategy,InitialState,PlanLength,StatesDiscovered,TimeTaken\n");
+                    
+                    forAllDiagnostics(searchInstances, searchTypes, distanceFunctions,
+                    new State(new int[] { 8, 6, 7, 2, 5, 4, 3, 0, 1 }, 7, null));
+
+                    System.out.println("\nWriting to csv file...");
+                    // Write the data rows
+                    for (int i = 0; i < searchInstances.length; i++) {
+                        writer.append(searchTypes[i]) // Strategy
+                        .append(",")
+                        .append(String.valueOf("State 1"))
+                        .append(",")
+                        .append(String.valueOf(searchInstances[i].result.actions)) // PlanLength
+                        .append(",")
+                        .append(String.valueOf(searchInstances[i].result.uniqueStatesCount)) // StatesDiscovered
+                        .append(",")
+                        .append(String.valueOf(searchInstances[i].result.duration)) // TimeTaken
+                        .append("\n");
+                    }
+
+                    System.out.println("Done.\n");
+
+                    forAllDiagnostics(searchInstances, searchTypes, distanceFunctions,
+                    new State(new int[] { 6, 4, 7, 8, 5, 0, 3, 2, 1 }, 5, null));
+
+                    System.out.println("\nWriting to csv file...");
+                    // Write the data rows
+                    for (int i = 0; i < searchInstances.length; i++) {
+                        writer.append(searchTypes[i]) // Strategy
+                        .append(",")
+                        .append(String.valueOf("State 2"))
+                        .append(",")
+                        .append(String.valueOf(searchInstances[i].result.actions)) // PlanLength
+                        .append(",")
+                        .append(String.valueOf(searchInstances[i].result.uniqueStatesCount)) // StatesDiscovered
+                        .append(",")
+                        .append(String.valueOf(searchInstances[i].result.duration)) // TimeTaken
+                        .append("\n");
+                    }
+
+                    System.out.println("Done.\n");
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                
                 break;
         }
         scn.close();
