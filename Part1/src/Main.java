@@ -35,28 +35,24 @@ public class Main {
         }
     }
 
-    public void PrintPuzzlePosition(int[] statePuzzlePostion) {
-        System.out.print("[");
-        for (int i = 0; i < 9; i++) {
-            switch (i) {
-                case 2, 5:
-                    System.out.println(statePuzzlePostion[i] + ",");
-                    break;
-                case 8:
-                    System.out.print(statePuzzlePostion[i]);
-                    break;
-                default:
-                    System.out.print(statePuzzlePostion[i] + ",");
-                    break;
+    public static void PrintBoard(int[] board) {
+        for (int row = 0; row < 3; row++) {
+            System.out.print("[ ");
+            for (int col = 0; col < 3; col++) {
+                System.out.print(board[row * 3 + col] + " ");
             }
+            System.out.println("]");
         }
-        System.out.println("]");
     }
 
     // ================= Main Method ============================
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
-        int searchOption = 0, hueristicOption = 0, testStatesCheck = 0, displayBoardCheck = -1;
+
+        int searchOption = 0;
+        int hueristicOption = 0;
+        int testStatesCheck = 0;
+        int displayBoardCheck = -1;
 
         Main searchInstance;
         String searchType;
@@ -101,7 +97,8 @@ public class Main {
         System.out.println("[[8,6,7],[2,5,4],[3,0,1]]:    [1]");
         System.out.println("[[6,4,7],[8,5,0],[3,2,1]]:    [2]");
         System.out.println("[[1,2,3],[4,5,6],[8,7,0]]:    [3]");
-        while (testStatesCheck < 1 || testStatesCheck > 3) {
+        System.out.println("[Custom Board]:               [4]");
+        while (testStatesCheck < 1 || testStatesCheck > 4) {
             System.out.print("Enter Option: ");
             testStatesCheck = scn.nextInt();
         }
@@ -117,8 +114,46 @@ public class Main {
             case 3:
                 initialState = new State(new int[] { 1, 2, 3, 4, 5, 6, 8, 7, 0 }, 8, null);
                 break;
+            case 4:
+                int[] customBoard = new int[9];
+                int emptyTileIndex = 0;
+
+                System.out.println("\n------ CUSTOM BOARD INPUT -------");
+                for (int i = 0; i < 9; i++) {
+                    boolean invalid = false;
+
+                    System.out.print("Enter Tile [" + i + "]: ");
+                    customBoard[i] = scn.nextInt();
+
+                    if (customBoard[i] == 0)
+                        emptyTileIndex = i;
+
+                    // Out of bounds check
+                    if (customBoard[i] < 0 || customBoard[i] > 8) {
+                        System.out.println("Error: "+customBoard[i]+" out of bounds.");
+                        invalid = true;
+                    }
+
+                    // Already exists check
+                    for (int j = 0; j < i; j++) {
+                        if (customBoard[j] == customBoard[i]) {
+                            System.out.println("Error: "+customBoard[i]+" already exists.");
+                            invalid = true;
+                            break;
+                        }
+                    }
+
+                    if (invalid)
+                        i--;
+                }
+                System.out.println();
+                initialState = new State(customBoard, emptyTileIndex, null);
+                break;
         }
-        // initialState = new State(new int[] { 1, 2, 3, 4, 6, 5, 7, 8, 0 }, 8, null);
+
+        System.out.println("\nINITIAL BOARD:");
+        PrintBoard(initialState.board);
+
         switch (searchOption) {
             case 1:
                 searchInstance = new Main();
