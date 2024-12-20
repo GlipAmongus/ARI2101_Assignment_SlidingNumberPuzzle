@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.*;
 import java.util.function.BiFunction;
 import java.lang.System;
 
@@ -10,28 +11,43 @@ public class Main {
     public void executeSearch(State initialState, BiFunction<int[], int[], Integer> distanceFunction,
             String searchType) {
         SearchAlgorithms searchAlgorithms = new SearchAlgorithms();
-        switch (searchType) {
-            case "BreadthFirst":
-                result = searchAlgorithms.FindBreadthFirstPlan(initialState);
-                break;
-            case "Greedy (Manhattan)":
-                result = searchAlgorithms.FindGreedyPlan(initialState, distanceFunction);
-                break;
-            case "Greedy (Misplaced)":
-                result = searchAlgorithms.FindGreedyPlan(initialState, distanceFunction);
-                break;
-            case "A* (Manhattan)":
-                result = searchAlgorithms.FindAstarPlan(initialState, distanceFunction);
-                break;
-            case "A* (Misplaced)":
-                result = searchAlgorithms.FindAstarPlan(initialState, distanceFunction);
-                break;
-            case "EHC (Manhattan)":
-                result = searchAlgorithms.FindEnforcedPlan(initialState, distanceFunction);
-                break;
-            case "EHC (Misplaced)":
-                result = searchAlgorithms.FindEnforcedPlan(initialState, distanceFunction);
-                break;
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        try {
+            Callable<Result> task = () -> {
+                switch (searchType) {
+                    case "BreadthFirst":
+                        return searchAlgorithms.FindBreadthFirstPlan(initialState);
+
+                    case "Greedy (Manhattan)":
+                    case "Greedy (Misplaced)":
+                        return searchAlgorithms.FindGreedyPlan(initialState, distanceFunction);
+                    
+                    case "A* (Manhattan)":
+                    case "A* (Misplaced)":
+                        return searchAlgorithms.FindAstarPlan(initialState, distanceFunction);
+                
+                    case "EHC (Manhattan)":
+                    case "EHC (Misplaced)":
+                        return searchAlgorithms.FindEnforcedPlan(initialState, distanceFunction);
+                
+                    default:
+                       throw new IllegalArgumentException("Unknown search type: " + searchType);
+                }
+            };
+
+            // Run the task with a timeout of 10 seconds
+            Future<Result> future = executor.submit(task);
+            try {
+                result = future.get(10, TimeUnit.MILLISECONDS); // Set timeout to 10 seconds
+            } catch (TimeoutException e) {
+                System.out.println("Search type \"" + searchType + "\" timed out after 10ms.");
+                result = null; // Handle timeout (e.g., set result to null or a specific value)
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            executor.shutdown();
         }
     }
 
