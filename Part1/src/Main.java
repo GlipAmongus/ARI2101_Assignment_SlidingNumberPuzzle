@@ -5,7 +5,7 @@ import java.util.function.BiFunction;
 import java.lang.System;
 
 public class Main {
-    public Result result; // final state returned by search
+    public Result result;
 
     public void executeSearch(State initialState, BiFunction<int[], int[], Integer> distanceFunction,
             String searchType) {
@@ -35,6 +35,7 @@ public class Main {
         }
     }
 
+    // ====================== Print Board Functions =========================
     public static void PrintBoard(int[] board) {
         for (int row = 0; row < 3; row++) {
             System.out.print("[ ");
@@ -42,6 +43,30 @@ public class Main {
                 System.out.print(board[row * 3 + col] + " ");
             }
             System.out.println("]");
+        }
+    }
+
+    public static void PrintStep(int[] current, int[] target) {
+        for (int row = 0; row < 3; row++) {
+            // Print the corresponding row from the first array
+            System.out.print("[ ");
+            for (int col = 0; col < 3; col++) {
+                System.out.print(current[row * 3 + col] + " ");
+            }
+            if (row == 1) {
+                System.out.print("] -> [ ");
+            } else {
+                System.out.print("]    [ ");
+            }
+
+            // Print the corresponding row from the second array
+            for (int col = 0; col < 3; col++) {
+                System.out.print(target[row * 3 + col] + " ");
+            }
+            System.out.print("]");
+
+            // Move to the next line
+            System.out.println();
         }
     }
 
@@ -235,27 +260,7 @@ public class Main {
                 System.out.println("Move: " + searchInstance.result.plan.get(step)
                         + "   | Action: " + (step + 1));
 
-                for (int row = 0; row < 3; row++) {
-                    // Print the corresponding row from the first array
-                    System.out.print("[ ");
-                    for (int col = 0; col < 3; col++) {
-                        System.out.print(current[row * 3 + col] + " ");
-                    }
-                    if (row == 1) {
-                        System.out.print("] -> [ ");
-                    } else {
-                        System.out.print("]    [ ");
-                    }
-
-                    // Print the corresponding row from the second array
-                    for (int col = 0; col < 3; col++) {
-                        System.out.print(target[row * 3 + col] + " ");
-                    }
-                    System.out.print("]");
-
-                    // Move to the next line
-                    System.out.println();
-                }
+                PrintStep(current, target);
 
                 current = target;
                 if (!searchInstance.result.boards.empty()) {
