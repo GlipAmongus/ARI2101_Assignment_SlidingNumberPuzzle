@@ -10,11 +10,12 @@ public class Main {
 
     public void executeSearch(State initialState, BiFunction<int[], int[], Integer> distanceFunction,
             String searchType) {
+                
         SearchAlgorithms searchAlgorithms = new SearchAlgorithms();
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
         try {
-            Callable<Result> task = () -> {
+            Callable<Result> search = () -> {
                 switch (searchType) {
                     case "BreadthFirst":
                         return searchAlgorithms.FindBreadthFirstPlan(initialState);
@@ -36,13 +37,13 @@ public class Main {
                 }
             };
 
-            // Run the task with a timeout of 10 seconds
-            Future<Result> future = executor.submit(task);
+            // Run the search with a timeout of 15 minutes
+            Future<Result> future = executor.submit(search);
             try {
-                result = future.get(10, TimeUnit.MILLISECONDS); // Set timeout to 10 seconds
+                result = future.get(15, TimeUnit.MINUTES);
             } catch (TimeoutException e) {
-                System.out.println("Search type \"" + searchType + "\" timed out after 10ms.");
-                result = null; // Handle timeout (e.g., set result to null or a specific value)
+                System.out.println("Search type \"" + searchType + "\" did not find a solution in 15 minutes.");
+                result = null; 
             }
         } catch (Exception e) {
             e.printStackTrace();
