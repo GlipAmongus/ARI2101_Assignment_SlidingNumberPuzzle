@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.*;
@@ -12,7 +13,7 @@ public class Main {
 
     public void executeSearch(State initialState, BiFunction<int[], int[], Integer> distanceFunction,
             String searchType) {
-                
+
         SearchAlgorithms searchAlgorithms = new SearchAlgorithms();
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -25,17 +26,17 @@ public class Main {
                     case "Greedy (Manhattan)":
                     case "Greedy (Misplaced)":
                         return searchAlgorithms.FindGreedyPlan(initialState, distanceFunction);
-                    
+
                     case "A* (Manhattan)":
                     case "A* (Misplaced)":
                         return searchAlgorithms.FindAstarPlan(initialState, distanceFunction);
-                
+
                     case "EHC (Manhattan)":
                     case "EHC (Misplaced)":
                         return searchAlgorithms.FindEnforcedPlan(initialState, distanceFunction);
-                
+
                     default:
-                       throw new IllegalArgumentException("Unknown search type: " + searchType);
+                        throw new IllegalArgumentException("Unknown search type: " + searchType);
                 }
             };
 
@@ -45,7 +46,7 @@ public class Main {
                 result = future.get(15, TimeUnit.MINUTES);
             } catch (TimeoutException e) {
                 System.out.println("Search type \"" + searchType + "\" did not find a solution in 15 minutes.");
-                result = null; 
+                result = null;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -153,54 +154,82 @@ public class Main {
                 initialState = new State(new int[] { 8, 6, 7, 2, 5, 4, 3, 0, 1 }, 7, null);
                 System.out.println("\nINITIAL BOARD:");
                 PrintBoard(initialState.board);
+                System.out.println();
                 break;
             case 2:
                 initialState = new State(new int[] { 6, 4, 7, 8, 5, 0, 3, 2, 1 }, 5, null);
                 System.out.println("\nINITIAL BOARD:");
                 PrintBoard(initialState.board);
+                System.out.println();
                 break;
             case 3:
                 initialState = new State(new int[] { 1, 2, 3, 4, 5, 6, 8, 7, 0 }, 8, null);
                 System.out.println("\nINITIAL BOARD:");
                 PrintBoard(initialState.board);
+                System.out.println();
                 break;
             case 4:
                 int[] customBoard = new int[9];
-                int emptyTileIndex = 0;
+                int customEmptyTile = -1;
+                boolean valid;
 
-                System.out.println("\n------ CUSTOM BOARD INPUT -------");
-                for (int i = 0; i < 9; i++) {
-                    boolean invalid = false;
+                do {
+                    valid = true;
+                    System.out.println("Enter 9 integers separated by commas (e.g: 1,2,3,4,5,6,7,8,0):");
+                    String boardString = scn.next();
 
-                    System.out.print("Enter Tile [" + i + "]: ");
-                    customBoard[i] = scn.nextInt();
+                    String[] tokens = boardString.split(",");
 
-                    if (customBoard[i] == 0)
-                        emptyTileIndex = i;
+                    // Process each token and print it
+                    if (tokens.length != 9) {
+                        System.out.println("Invalid input. You must provide exactly 9 integers.");
+                        valid = false;
+                    } else {
+                        try {
+                            int index = 0;
+                            for (String token : tokens) {
+                                customBoard[index] = Integer.parseInt(token.trim()); // Convert token to integer
 
-                    // Out of bounds check
-                    if (customBoard[i] < 0 || customBoard[i] > 8) {
-                        System.out.println("Error: "+customBoard[i]+" out of bounds.");
-                        invalid = true;
-                    }
+                                // Check tile range
+                                if (customBoard[index] < 0 || customBoard[index] > 8) {
+                                    valid = false;
+                                    System.out.println("Invalid input. Tile " + customBoard[index] + " out of range");
+                                    break;
+                                }
 
-                    // Already exists check
-                    for (int j = 0; j < i; j++) {
-                        if (customBoard[j] == customBoard[i]) {
-                            System.out.println("Error: "+customBoard[i]+" already exists.");
-                            invalid = true;
-                            break;
+                                // Check for empty tile
+                                if (customBoard[index] == 0) {
+                                    customEmptyTile = index;
+                                }
+                                
+                                index++;
+                            }
+                            // Validate duplicates
+                            if (valid) {
+                                HashSet<Integer> uniqueTiles = new HashSet<>();
+                                for (int tile : customBoard) {
+                                    if (!uniqueTiles.add(tile)) {
+                                        valid = false;
+                                        System.out.println("Invalid board. Duplicate tiles are not allowed.");
+                                        break;
+                                    }
+                                }
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input. Please ensure all values are integers.");
                         }
                     }
+                } while (valid == false);
 
-                    if (invalid)
-                        i--;
-                }
-                System.out.println();
-                initialState = new State(customBoard, emptyTileIndex, null);
+                // Result
+                if (valid) {
+                    System.out.println("Custom board is valid.");
+                } 
 
+                initialState = new State(customBoard, customEmptyTile, null);
                 System.out.println("\nINITIAL BOARD:");
                 PrintBoard(initialState.board);
+                System.out.println();
                 break;
             default:
                 break;
@@ -262,43 +291,43 @@ public class Main {
 
                 try (FileWriter writer = new FileWriter("results.csv")) {
                     writer.append("Strategy,InitialState,PlanLength,StatesDiscovered,TimeTaken\n");
-                    
+
                     forAllDiagnostics(searchInstances, searchTypes, distanceFunctions,
-                    new State(new int[] { 8, 6, 7, 2, 5, 4, 3, 0, 1 }, 7, null));
+                            new State(new int[] { 8, 6, 7, 2, 5, 4, 3, 0, 1 }, 7, null));
 
                     System.out.println("\nWriting to csv file...");
                     // Write the data rows
                     for (int i = 0; i < searchInstances.length; i++) {
                         writer.append(searchTypes[i]) // Strategy
-                        .append(",")
-                        .append(String.valueOf("State 1"))
-                        .append(",")
-                        .append(String.valueOf(searchInstances[i].result.actions)) // PlanLength
-                        .append(",")
-                        .append(String.valueOf(searchInstances[i].result.uniqueStatesCount)) // StatesDiscovered
-                        .append(",")
-                        .append(String.valueOf(searchInstances[i].result.duration)) // TimeTaken
-                        .append("\n");
+                                .append(",")
+                                .append(String.valueOf("State 1"))
+                                .append(",")
+                                .append(String.valueOf(searchInstances[i].result.actions)) // PlanLength
+                                .append(",")
+                                .append(String.valueOf(searchInstances[i].result.uniqueStatesCount)) // StatesDiscovered
+                                .append(",")
+                                .append(String.valueOf(searchInstances[i].result.duration)) // TimeTaken
+                                .append("\n");
                     }
 
                     System.out.println("Done.\n");
 
                     forAllDiagnostics(searchInstances, searchTypes, distanceFunctions,
-                    new State(new int[] { 6, 4, 7, 8, 5, 0, 3, 2, 1 }, 5, null));
+                            new State(new int[] { 6, 4, 7, 8, 5, 0, 3, 2, 1 }, 5, null));
 
                     System.out.println("\nWriting to csv file...");
                     // Write the data rows
                     for (int i = 0; i < searchInstances.length; i++) {
                         writer.append(searchTypes[i]) // Strategy
-                        .append(",")
-                        .append(String.valueOf("State 2"))
-                        .append(",")
-                        .append(String.valueOf(searchInstances[i].result.actions)) // PlanLength
-                        .append(",")
-                        .append(String.valueOf(searchInstances[i].result.uniqueStatesCount)) // StatesDiscovered
-                        .append(",")
-                        .append(String.valueOf(searchInstances[i].result.duration)) // TimeTaken
-                        .append("\n");
+                                .append(",")
+                                .append(String.valueOf("State 2"))
+                                .append(",")
+                                .append(String.valueOf(searchInstances[i].result.actions)) // PlanLength
+                                .append(",")
+                                .append(String.valueOf(searchInstances[i].result.uniqueStatesCount)) // StatesDiscovered
+                                .append(",")
+                                .append(String.valueOf(searchInstances[i].result.duration)) // TimeTaken
+                                .append("\n");
                     }
 
                     System.out.println("Done.\n");
@@ -306,7 +335,7 @@ public class Main {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                
+
                 break;
         }
         scn.close();
@@ -315,7 +344,13 @@ public class Main {
     public static void specificDiagnostic(Main searchInstance, String searchType,
             BiFunction<int[], int[], Integer> distanceFunction, State initialState, int display) {
 
-        System.out.println("======== " + searchType + " ========\n");
+        // format search algorithm title
+        String formattedLine = "=".repeat((38 - searchType.length() - 1) / 2) +
+                " " + searchType + " " +
+                "=".repeat((38 - searchType.length() - 1) / 2);
+
+        System.out.println(formattedLine + "\n");
+
         searchInstance.executeSearch(initialState, distanceFunction, searchType);
         // Print plan receipt
         System.out.println("Duration: " + searchInstance.result.duration + "ms");
@@ -325,7 +360,7 @@ public class Main {
         System.out.println("Plan: " + searchInstance.result.plan);
         System.out.println("\n=======================================\n");
 
-        if (display == 1) {
+        if (display == 1 && searchInstance.result.actions > 0) {
             int[] current = searchInstance.result.boards.pop();
             int[] target = searchInstance.result.boards.pop();
 
@@ -345,9 +380,17 @@ public class Main {
 
     public static void forAllDiagnostics(Main[] searchInstances, String[] searchTypes,
             List<BiFunction<int[], int[], Integer>> distanceFunctions, State initialState) {
+
+        // format search algorithm title
+        int totalLength = 38;
+        String padding = "=";
+
         for (int i = 0; i < searchInstances.length; i++) {
             searchInstances[i] = new Main();
-            System.out.println("======== " + searchTypes[i] + " ========\n");
+            String formattedLine = padding.repeat((totalLength - searchTypes[i].length() - 1) / 2) +
+                    " " + searchTypes[i] + " " +
+                    padding.repeat((totalLength - searchTypes[i].length() - 1) / 2);
+            System.out.println(formattedLine + "\n");
             searchInstances[i].executeSearch(initialState, distanceFunctions.get(i), searchTypes[i]);
             // Print plan receipt
             System.out.println("Duration: " + searchInstances[i].result.duration + "ms");
