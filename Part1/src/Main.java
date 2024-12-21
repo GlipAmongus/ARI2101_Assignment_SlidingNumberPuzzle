@@ -95,7 +95,7 @@ public class Main {
         Scanner scn = new Scanner(System.in);
 
         int searchOption = 0;
-        int hueristicOption = 0;
+        int distanceOption = 0;
         int testStatesCheck = 0;
         int displayBoardCheck = -1;
 
@@ -111,7 +111,7 @@ public class Main {
         System.out.println("Greedy Best First Search:     [2]");
         System.out.println("A* Search:                    [3]");
         System.out.println("Enforced Hill Climb Search:   [4]");
-        System.out.println("Perform All:                  [5]");
+        System.out.println("Evaluation:                   [5]");
 
         while (searchOption < 1 || searchOption > 5) {
             System.out.print("Enter Option: ");
@@ -119,13 +119,13 @@ public class Main {
         }
 
         if (searchOption > 1 && searchOption < 5) {
-            System.out.println("\n------- Hueristic Options -------");
-            System.out.println("Manhattan Hueristic:          [1]");
-            System.out.println("Misplaced Tiles Hueristic:    [2]");
+            System.out.println("\n------- DISTANCE OPTIONS --------");
+            System.out.println("Manhattan Distance:           [1]");
+            System.out.println("Misplaced Tiles Distance:     [2]");
 
-            while (hueristicOption < 1 || hueristicOption > 2) {
+            while (distanceOption < 1 || distanceOption > 2) {
                 System.out.print("Enter Option: ");
-                hueristicOption = scn.nextInt();
+                distanceOption = scn.nextInt();
             }
         }
 
@@ -152,21 +152,12 @@ public class Main {
         switch (testStatesCheck) {
             case 1:
                 initialState = new State(new int[] { 8, 6, 7, 2, 5, 4, 3, 0, 1 }, 7, null);
-                System.out.println("\nINITIAL BOARD:");
-                PrintBoard(initialState.board);
-                System.out.println();
                 break;
             case 2:
                 initialState = new State(new int[] { 6, 4, 7, 8, 5, 0, 3, 2, 1 }, 5, null);
-                System.out.println("\nINITIAL BOARD:");
-                PrintBoard(initialState.board);
-                System.out.println();
                 break;
             case 3:
                 initialState = new State(new int[] { 1, 2, 3, 4, 5, 6, 8, 7, 0 }, 8, null);
-                System.out.println("\nINITIAL BOARD:");
-                PrintBoard(initialState.board);
-                System.out.println();
                 break;
             case 4:
                 int[] customBoard = new int[9];
@@ -175,7 +166,7 @@ public class Main {
 
                 do {
                     valid = true;
-                    System.out.println("Enter 9 integers separated by commas (e.g: 1,2,3,4,5,6,7,8,0):");
+                    System.out.println("------ CUSTOM BOARD INPUT ------- \n(e.g: 1,2,3,4,5,6,7,8,0)\n");
                     String boardString = scn.next();
 
                     String[] tokens = boardString.split(",");
@@ -227,9 +218,6 @@ public class Main {
                 } 
 
                 initialState = new State(customBoard, customEmptyTile, null);
-                System.out.println("\nINITIAL BOARD:");
-                PrintBoard(initialState.board);
-                System.out.println();
                 break;
             default:
                 break;
@@ -244,7 +232,7 @@ public class Main {
                 break;
             case 2:
                 searchInstance = new Main();
-                if (hueristicOption == 1) {
+                if (distanceOption == 1) {
                     searchType = "Greedy (Manhattan)";
                     distanceFunction = DistanceFunctions::Manhattan;
                 } else {
@@ -255,7 +243,7 @@ public class Main {
                 break;
             case 3:
                 searchInstance = new Main();
-                if (hueristicOption == 1) {
+                if (distanceOption == 1) {
                     searchType = "A* (Manhattan)";
                     distanceFunction = DistanceFunctions::Manhattan;
                 } else {
@@ -266,7 +254,7 @@ public class Main {
                 break;
             case 4:
                 searchInstance = new Main();
-                if (hueristicOption == 1) {
+                if (distanceOption == 1) {
                     searchType = "EHC (Manhattan)";
                     distanceFunction = DistanceFunctions::Manhattan;
                 } else {
@@ -344,6 +332,9 @@ public class Main {
     public static void specificDiagnostic(Main searchInstance, String searchType,
             BiFunction<int[], int[], Integer> distanceFunction, State initialState, int display) {
 
+        System.out.println("\nINITIAL BOARD:");
+        PrintBoard(initialState.board);
+        System.out.println();
         // format search algorithm title
         String formattedLine = "=".repeat((38 - searchType.length() - 1) / 2) +
                 " " + searchType + " " +
@@ -381,15 +372,15 @@ public class Main {
     public static void forAllDiagnostics(Main[] searchInstances, String[] searchTypes,
             List<BiFunction<int[], int[], Integer>> distanceFunctions, State initialState) {
 
-        // format search algorithm title
-        int totalLength = 38;
-        String padding = "=";
+        System.out.println("\nINITIAL BOARD:");
+        PrintBoard(initialState.board);
+        System.out.println();
 
         for (int i = 0; i < searchInstances.length; i++) {
             searchInstances[i] = new Main();
-            String formattedLine = padding.repeat((totalLength - searchTypes[i].length() - 1) / 2) +
-                    " " + searchTypes[i] + " " +
-                    padding.repeat((totalLength - searchTypes[i].length() - 1) / 2);
+            String formattedLine = "=".repeat((38 - searchTypes[i].length() - 1) / 2) +
+                " " + searchTypes[i] + " " +
+                "=".repeat((38 - searchTypes[i].length() - 1) / 2);
             System.out.println(formattedLine + "\n");
             searchInstances[i].executeSearch(initialState, distanceFunctions.get(i), searchTypes[i]);
             // Print plan receipt
@@ -400,6 +391,10 @@ public class Main {
             System.out.println("Plan: " + searchInstances[i].result.plan);
             System.out.println("\n=======================================\n");
         }
+        
+        System.out.println("\nINITIAL BOARD:");
+        PrintBoard(initialState.board);
+        System.out.println();
 
         System.out.println("\n============== Summary ==============\n");
         System.out.printf("%-20s | %-8s | %-8s | %-13s%n", "Algorithm", "Duration", "Actions", "Unique States");

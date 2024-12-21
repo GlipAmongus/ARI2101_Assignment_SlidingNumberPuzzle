@@ -50,7 +50,7 @@ def plotDurationVsSearch(df, state):
     
     # Adding legend
     plt.legend()
-
+ 
     # Rotate x-axis labels for better readability
     plt.xticks(rotation=45)
 
