@@ -22,18 +22,23 @@ public class Result {
         boards.push(state.board);
         plan.add(state.move);
 
+        // Iterate through ancestors until ancestor is null (initState)
         while (ancestor != null) {
+
             boards.push(ancestor.board);
             if (ancestor.parent != null) {
                 plan.add(ancestor.move);
             }
             actions++;
+
             ancestor = ancestor.parent;
         }
         Collections.reverse(plan);
 
         // ===================== Validation Step =========================
+        // Clone initial state to safely augment the board 
         int[] simBoard = boards.peek().clone();
+        // Find empty tile index
         int simEmptyIndex = -1;
         for(int i = 0; i < 9; i++){
             if(simBoard[i] == 0){
@@ -42,12 +47,14 @@ public class Result {
             }
         }
 
+        // Apply all moves stores to simulated board 
         for (int i = 0; i < plan.size(); i++) {
-            switch (plan.get(i)) {
+            switch (plan.get(i)) { 
                 case 'd':
                     if (simEmptyIndex - 3 >= 0) {
+                        // Swap helper function
                         Swap(simBoard, simEmptyIndex, -3);
-                        simEmptyIndex -= 3;
+                        simEmptyIndex -= 3; // update 0 index
                     }
                     break;
                 case 'u':
@@ -71,15 +78,15 @@ public class Result {
 
             }
         }
-
+        // If after all the moves goalBoard is found then plan is valid
         if (Arrays.equals(simBoard, new int[]{1,2,3,4,5,6,7,8,0})) {
             validity = true;
         }
     }
 
-    public void Swap(int[] board, int emptyTileIndex, int shift) {
+    private void Swap(int[] board, int emptyTileIndex, int shift) {
         board[emptyTileIndex] = board[emptyTileIndex
                 + shift];
-        board[emptyTileIndex + shift] = 0;
+        board[emptyTileIndex + shift] = 0; 
     }
 }
