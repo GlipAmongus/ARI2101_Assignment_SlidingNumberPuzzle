@@ -101,23 +101,34 @@ public class Main {
 
         Main searchInstance;
         String searchType;
-
         BiFunction<int[], int[], Integer> distanceFunction;
+
+        Main[] searchInstances = new Main[7];
+        String[] searchTypes = new String[] { "BreadthFirst", "Greedy (Manhattan)", "Greedy (Misplaced)",
+                        "A* (Manhattan)",
+                        "A* (Misplaced)", "EHC (Manhattan)", "EHC (Misplaced)" };
+        List<BiFunction<int[], int[], Integer>> distanceFunctions = new ArrayList<>();
 
         State initialState = null;
 
+
+        // ======================== MENU ============================
+
+        // ====================== Search Algorithms =========================
         System.out.println("-------- SEARCH OPTIONS ---------");
         System.out.println("Breadth First Search:         [1]");
         System.out.println("Greedy Best First Search:     [2]");
         System.out.println("A* Search:                    [3]");
         System.out.println("Enforced Hill Climb Search:   [4]");
-        System.out.println("Evaluation:                   [5]");
+        System.out.println("Perform All:                  [5]");
+        System.out.println("Evaluation:                   [6]");
 
-        while (searchOption < 1 || searchOption > 5) {
+        while (searchOption < 1 || searchOption > 6) {
             System.out.print("Enter Option: ");
             searchOption = scn.nextInt();
         }
 
+        // ====================== Distance Functions =========================
         if (searchOption > 1 && searchOption < 5) {
             System.out.println("\n------- DISTANCE OPTIONS --------");
             System.out.println("Manhattan Distance:           [1]");
@@ -129,14 +140,18 @@ public class Main {
             }
         }
 
-        if (searchOption != 5) {
+        // ========================= Print Board =============================
+        if (searchOption > 0 && searchOption < 5) {
             System.out.println("\n--------- PRINT BOARD -----------");
             System.out.println("Display board after each plan action: [1/0]");
             while (displayBoardCheck < 0 || displayBoardCheck > 1) {
                 System.out.print("Enter Option: ");
                 displayBoardCheck = scn.nextInt();
             }
+        }
 
+        // ====================== Initial Test State =========================
+        if (searchOption != 6) {
             System.out.println("\n------ INITIAL TEST STATE -------");
             System.out.println("[[8,6,7],[2,5,4],[3,0,1]]:    [1]");
             System.out.println("[[6,4,7],[8,5,0],[3,2,1]]:    [2]");
@@ -149,6 +164,8 @@ public class Main {
             System.out.println();
         }
 
+
+        // ====================== Board Initialiazation =========================
         switch (testStatesCheck) {
             case 1:
                 initialState = new State(new int[] { 8, 6, 7, 2, 5, 4, 3, 0, 1 }, 7, null);
@@ -159,7 +176,7 @@ public class Main {
             case 3:
                 initialState = new State(new int[] { 1, 2, 3, 4, 5, 6, 8, 7, 0 }, 8, null);
                 break;
-            case 4:
+            case 4:         // ====================== Custom Board =========================
                 int[] customBoard = new int[9];
                 int customEmptyTile = -1;
                 boolean valid;
@@ -223,6 +240,7 @@ public class Main {
                 break;
         }
 
+        // ========================= Execute Selection ============================
         switch (searchOption) {
             case 1:
                 searchInstance = new Main();
@@ -264,11 +282,16 @@ public class Main {
                 specificDiagnostic(searchInstance, searchType, distanceFunction, initialState, displayBoardCheck);
                 break;
             case 5:
-                Main[] searchInstances = new Main[7];
-                String[] searchTypes = new String[] { "BreadthFirst", "Greedy (Manhattan)", "Greedy (Misplaced)",
-                        "A* (Manhattan)",
-                        "A* (Misplaced)", "EHC (Manhattan)", "EHC (Misplaced)" };
-                List<BiFunction<int[], int[], Integer>> distanceFunctions = new ArrayList<>();
+                distanceFunctions.add(null); // Breadth-First doesn't need a heuristic function
+                distanceFunctions.add(DistanceFunctions::Manhattan);
+                distanceFunctions.add(DistanceFunctions::MisplacedTiles);
+                distanceFunctions.add(DistanceFunctions::Manhattan);
+                distanceFunctions.add(DistanceFunctions::MisplacedTiles);
+                distanceFunctions.add(DistanceFunctions::Manhattan);
+                distanceFunctions.add(DistanceFunctions::MisplacedTiles);
+                forAllDiagnostics(searchInstances, searchTypes, distanceFunctions, initialState);
+                break;
+            case 6:
                 distanceFunctions.add(null); // Breadth-First doesn't need a heuristic function
                 distanceFunctions.add(DistanceFunctions::Manhattan);
                 distanceFunctions.add(DistanceFunctions::MisplacedTiles);
