@@ -151,67 +151,168 @@ public class SearchAlgorithms {
         return result;
     }
 
-    // ================= Enforced Hill Climb Search with backtrack ============================
-    public Result FindEnforcedPlan(State initialState, BiFunction<int[], int[], Integer> DistanceFunction) {
-        long startTime = System.currentTimeMillis();
-        State bestState = initialState;
-        result = new Result();
-        Stack<State> stateStack = new Stack<>(); // Stack for backtracking
-        HashSet<State> closedStates = new HashSet<>(); // Closed set
+// ================= Enforced Hill Climb Search with backtrack ============================
+public Result FindEnforcedPlan(State initialState, BiFunction<int[], int[], Integer> DistanceFunction) {
+    long startTime = System.currentTimeMillis();
+    State bestState = initialState;
+    result = new Result();
+    Stack<State> stateStack = new Stack<>(); // Stack for backtracking
+    HashSet<State> closedStates = new HashSet<>(); // Closed set
 
-        bestState.hCost = DistanceFunction.apply(bestState.board, goalState.board);
+    bestState.hCost = DistanceFunction.apply(bestState.board, goalState.board);
 
+    int bfsCounter = -1;
+    int closedCounter = 0;
+
+    // Traverse all edge states until none are left
+    while (bestState != null ) {
         stateStack.push(bestState);
+        bfsCounter++;
+    while (!stateStack.isEmpty()) {
+        State currentState = stateStack.pop();
+        closedStates.add(currentState);
 
-        // Traverse all edge states until none are left
-        while (!stateStack.isEmpty()) {
-            State currentState = stateStack.pop();
-            closedStates.add(currentState);
+        // Goal found, terminate and construct result
+        if (currentState.equals(goalState)) {
+            System.out.println("BFS counter: "+bfsCounter);
+            diagnosticHelper(startTime, closedCounter + closedStates.size(), stateStack.size(), currentState);
+            return result;
+        }
 
-            // Goal found, terminate and construct result
-            if (currentState.equals(goalState)) {
-                diagnosticHelper(startTime, closedStates.size(), stateStack.size(), currentState);
-                return result;
-            }
+        // boolean improved = false;
+        for (State child : currentState.children()) {
 
-            boolean improved = false;
-            for (State child : currentState.children()) {
+            if (closedStates.contains(child))
+                continue; // Skip already explored states
 
-                if (closedStates.contains(child))
-                    continue; // Skip already explored states
+            child.hCost = DistanceFunction.apply(child.board, goalState.board);
 
-                child.hCost = DistanceFunction.apply(child.board, goalState.board);
-
-                if (child.hCost <= bestState.hCost) {
-                    bestState = child;
-                    stateStack.push(child); // Push the better state onto the stack
-                    improved = true;
-                }
-            }
-
-            // If no improvement was made, backtrack by revisiting previous states
-            if (!improved) {
-                if (currentState.parent != null) {
-
-                    State parent = currentState.parent;
-
-                    for (State sibling : parent.children()) {
-                        // Revisit unexplored siblings
-                        if (!closedStates.contains(sibling)) {
-                            stateStack.push(sibling); // Push sibling onto the stack
-                        }
-                    }   
-                    
-                    stateStack.push(parent);
-                }
+            if (child.hCost <= bestState.hCost) {
+                bestState = child;
+                stateStack.push(child); // Push the better state onto the stack
+                // improved = true;
             }
         }
 
-        // Goal not found, terminate and construct result
-        diagnosticHelper(startTime, closedStates.size(), stateStack.size(), bestState);
-        return result;
-    } 
+        // // If no improvement was made, backtrack by revisiting previous states
+        //     if (!improved) {
+        //         if (currentState.parent != null) {
 
+        //             State parent = currentState.parent;
+
+        //             for (State sibling : parent.children()) {
+        //                 // Revisit unexplored siblings
+        //                 if (!closedStates.contains(sibling)) {
+        //                     stateStack.push(sibling); // Push sibling onto the stack
+        //                 }
+        //             }   
+                    
+        //             stateStack.push(parent);
+        //         }
+        //     }
+        
+        }
+            // Data structures storing explored and unexplored states
+            Queue<State> edgeStates = new LinkedList<>();
+            HashSet<State> closedStatesB = new HashSet<>();
+            HashSet<State> inEdgeStates = new HashSet<>();
+    
+            edgeStates.add(bestState);
+            // Traverse all edge states until none are left
+            while (!edgeStates.isEmpty()) {
+                // First in queue goes from unexplored to explored
+                State currentState = edgeStates.poll();
+                inEdgeStates.remove(currentState);
+                closedStatesB.add(currentState);
+    
+                // Goal found with improvement
+                if (DistanceFunction.apply(currentState.board, goalState.board) == bestState.hCost - 1) {
+                    currentState.hCost = DistanceFunction.apply(currentState.board, goalState.board);
+                    bestState = currentState;
+                    break;
+                }
+    
+                // Expand state in layer n and enqueue its children in layer n+1
+                for (State child : currentState.children()) {
+                    // If not a redundant state enqueue child
+                    if (closedStatesB.contains(child) || inEdgeStates.contains(child))
+                        continue;
+    
+                    edgeStates.offer(child);
+                    inEdgeStates.add(child);
+                }
+            }
+            closedCounter += closedStatesB.size();
+    }
+
+    // Goal not found, terminate and construct result
+    diagnosticHelper(startTime, closedStates.size(), stateStack.size(), bestState);
+    return result;
+} 
+    // // ================= Enforced Hill Climb Search with backtrack ============================
+    // public Result FindEnforcedPlan(State initialState, BiFunction<int[], int[], Integer> DistanceFunction) {
+    //     long startTime = System.currentTimeMillis();
+    //     State bestState = initialState;
+    //     result = new Result();
+    //     Stack<State> stateStack = new Stack<>(); // Stack for backtracking
+    //     HashSet<State> closedStates = new HashSet<>(); // Closed set
+
+    //     bestState.hCost = DistanceFunction.apply(bestState.board, goalState.board);
+
+    //     stateStack.push(bestState);
+
+    //     // Traverse all edge states until none are left
+    //     while (!stateStack.isEmpty()) {
+    //         State currentState = stateStack.pop();
+    //         closedStates.add(currentState);
+
+    //         // Goal found, terminate and construct result
+    //         if (currentState.equals(goalState)) {
+    //             diagnosticHelper(startTime, closedStates.size(), stateStack.size(), currentState);
+    //             return result;
+    //         }
+
+    //         boolean improved = false;
+    //         for (State child : currentState.children()) {
+
+    //             if (closedStates.contains(child))
+    //                 continue; // Skip already explored states
+
+    //             child.hCost = DistanceFunction.apply(child.board, goalState.board);
+
+    //             if (child.hCost <= bestState.hCost) {
+    //                 bestState = child;
+    //                 stateStack.push(child); // Push the better state onto the stack
+    //                 improved = true;
+    //             }
+    //         }
+
+    //         // If no improvement was made, backtrack by revisiting previous states
+    //         if (!improved) {
+    //             if (currentState.parent != null) {
+
+    //                 State parent = currentState.parent;
+
+    //                 for (State sibling : parent.children()) {
+    //                     // Revisit unexplored siblings
+    //                     if (!closedStates.contains(sibling)) {
+    //                         stateStack.push(sibling); // Push sibling onto the stack
+    //                     }
+    //                 }   
+                    
+    //                 stateStack.push(parent);
+    //             }
+    //         }
+    //     }
+
+    //     // Goal not found, terminate and construct result
+    //     diagnosticHelper(startTime, closedStates.size(), stateStack.size(), bestState);
+    //     return result;
+    // } 
+
+    
+    
+    
     private void diagnosticHelper(long startTime, int closedSize, int edgeSize, State finalState) {
         long endTime = System.currentTimeMillis();
         result.duration = endTime - startTime;
