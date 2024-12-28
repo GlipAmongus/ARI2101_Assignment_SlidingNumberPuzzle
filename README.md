@@ -1,5 +1,5 @@
-PART 1<br /><br />
-Navigate to Part1 directory<br />
+PART 1<br />
+Navigate to Part1 directory in cmd<br />
 To compile:<br />
 Run: javac -d bin src/*.java <br /><br />
 To run:<br />
