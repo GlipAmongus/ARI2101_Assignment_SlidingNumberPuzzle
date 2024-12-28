@@ -1,0 +1,15 @@
+Strategy,InitialState,PlanLength,StatesDiscovered,TimeTaken
+BFS,State 1,31,181440,334
+GBFS (Man),State 1,45,190,3
+GBFS (Mis),State 1,149,1699,2
+A* (Man),State 1,31,7884,15
+A* (Mis),State 1,31,143000,255
+EHC (Man),State 1,45,4494,5
+EHC (Mis),State 1,61,35920,29
+BFS,State 2,31,181440,227
+GBFS (Man),State 2,47,147,1
+GBFS (Mis),State 2,89,1202,1
+A* (Man),State 2,31,7868,5
+A* (Mis),State 2,31,143007,180
+EHC (Man),State 2,75,14895,12
+EHC (Mis),State 2,83,24433,57

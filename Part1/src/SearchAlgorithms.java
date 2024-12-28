@@ -162,17 +162,16 @@ public class SearchAlgorithms {
         closedStates.add(bestState);
 
         int BFSedgeStates = 0;
-        int BFSCounter = -1; // track times BFS was used
+        int BFSCounter = 0; // track times BFS was used
 
-        // Traverse all edge states until none are left
-        while (bestState != bestState.parent) {
-
-            BFSCounter++;
+        // Run hill climb then bfs until improved by neither 
+        boolean bfsImproved = true; 
+        while (bfsImproved) {
 
             // ============================ HC ================================
-            boolean improved = true;
-            while (improved) {
-                improved = false;
+            boolean hcImproved = true;
+            while (hcImproved) {
+                hcImproved = false;
 
                 // Goal found, terminate and construct result
                 if (bestState.equals(goalState)) {
@@ -191,7 +190,7 @@ public class SearchAlgorithms {
                     // Continue ehc only if immediately better 
                     if (child.hCost < bestState.hCost) {
                         bestState = child;
-                        improved = true;
+                        hcImproved = true;
                         break;
                     }
                 }
@@ -200,11 +199,13 @@ public class SearchAlgorithms {
             /* Apply Breadth first search when reach plateau
              * ======== Breadth First Search ==========
              */
+            BFSCounter++;
             // Data structures storing explored and unexplored states
             Queue<State> edgeStates = new LinkedList<>();
             HashSet<State> inEdgeStates = new HashSet<>();
 
             edgeStates.add(bestState);
+            bfsImproved = false;
             // Traverse all edge states until none are left
             while (!edgeStates.isEmpty()) {
                 // First in queue goes from unexplored to explored
@@ -216,6 +217,7 @@ public class SearchAlgorithms {
                 if (DistanceFunction.apply(currentState.board, goalState.board) == bestState.hCost - 1) {
                     currentState.hCost = DistanceFunction.apply(currentState.board, goalState.board);
                     bestState = currentState;
+                    bfsImproved = true;
                     break;
                 }
 
@@ -233,7 +235,9 @@ public class SearchAlgorithms {
             BFSedgeStates += inEdgeStates.size();
         }
 
+
         // Goal not found, terminate and construct result
+        System.out.println("BFS counter: " + BFSCounter);
         diagnosticHelper(startTime, closedStates.size(), BFSedgeStates, bestState);
         return result;
     }
