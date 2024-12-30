@@ -152,7 +152,7 @@ public class Main {
 
         // ====================== Initial Test State =========================
         if (searchOption != 6) {
-            System.out.println("\n------ INITIAL TEST STATE -------");
+            System.out.println("\n-------- INITIAL STATE ----------");
             System.out.println("[[8,6,7],[2,5,4],[3,0,1]]:    [1]");
             System.out.println("[[6,4,7],[8,5,0],[3,2,1]]:    [2]");
             System.out.println("[[1,2,3],[4,5,6],[8,7,0]]:    [3]");
