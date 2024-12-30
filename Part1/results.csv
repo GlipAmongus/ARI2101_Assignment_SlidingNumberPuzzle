@@ -1,15 +1,15 @@
 Strategy,InitialState,PlanLength,StatesDiscovered,TimeTaken
-BreadthFirst,State 1,31,181440,333
-Greedy (Manhattan),State 1,45,190,4
+BreadthFirst,State 1,31,181440,353
+Greedy (Manhattan),State 1,45,189,3
 Greedy (Misplaced),State 1,149,1699,3
 A* (Manhattan),State 1,31,7884,12
-A* (Misplaced),State 1,31,143000,302
-EHC (Manhattan),State 1,47,110,3
-EHC (Misplaced),State 1,191,1093,2
-BreadthFirst,State 2,31,181440,269
+A* (Misplaced),State 1,31,142999,243
+EHC (Manhattan),State 1,47,110,4
+EHC (Misplaced),State 1,191,1093,1
+BreadthFirst,State 2,31,181440,220
 Greedy (Manhattan),State 2,47,147,0
-Greedy (Misplaced),State 2,89,1202,1
-A* (Manhattan),State 2,31,7868,11
-A* (Misplaced),State 2,31,143007,212
+Greedy (Misplaced),State 2,89,1201,0
+A* (Manhattan),State 2,31,7867,5
+A* (Misplaced),State 2,31,143007,183
 EHC (Manhattan),State 2,45,66,0
-EHC (Misplaced),State 2,85,379,1
+EHC (Misplaced),State 2,85,379,0

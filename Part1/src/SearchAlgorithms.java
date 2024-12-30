@@ -28,17 +28,17 @@ public class SearchAlgorithms {
             inEdgeStates.remove(currentState);
             closedStates.add(currentState);
 
-            // Goal found, terminate and construct result
-            if (currentState.equals(goalState)) {
-                diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), currentState);
-                return result;
-            }
-
             // Expand state in layer n and enqueue its children in layer n+1
             for (State child : currentState.children()) {
                 // If not a redundant state enqueue child
                 if (closedStates.contains(child) || inEdgeStates.contains(child))
                     continue;
+
+                // Goal found, terminate and construct result
+                if (child.equals(goalState)) {
+                    diagnosticHelper(startTime, closedStates.size(), edgeStates.size()+1, child);
+                    return result;
+                }
 
                 edgeStates.offer(child);
                 inEdgeStates.add(child);
@@ -70,17 +70,17 @@ public class SearchAlgorithms {
             inEdgeStates.remove(currentState);
             closedStates.add(currentState);
 
-            // Goal found, terminate and construct result
-            if (currentState.equals(goalState)) {
-                diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), currentState);
-                return result;
-            }
-
             // Expand state and loop over children
             for (State child : currentState.children()) {
                 // Redundancy Check
                 if (closedStates.contains(child) || inEdgeStates.contains(child))
                     continue;
+
+                // Goal found, terminate and construct result
+                if (child.equals(goalState)) {
+                    diagnosticHelper(startTime, closedStates.size(), edgeStates.size()+1, child);
+                    return result;
+                }
 
                 child.hCost = DistanceFunction.apply(child.board, goalState.board);
                 // Enqueue in order of hcost
@@ -121,17 +121,17 @@ public class SearchAlgorithms {
             inEdgeStates.remove(currentState);
             closedStates.add(currentState);
 
-            // Goal found, terminate and construct result
-            if (currentState.equals(goalState)) {
-                diagnosticHelper(startTime, closedStates.size(), edgeStates.size(), currentState);
-                return result;
-            }
-
             // Expand state and loop over children
             for (State child : currentState.children()) {
                 // Redundancy Check
                 if (closedStates.contains(child) || inEdgeStates.contains(child))
                     continue;
+
+                // Goal found, terminate and construct result
+                if (child.equals(goalState)) {
+                    diagnosticHelper(startTime, closedStates.size(), edgeStates.size()+1, child);
+                    return result;
+                }
 
                 /*
                  * Since moves are cardinal,
