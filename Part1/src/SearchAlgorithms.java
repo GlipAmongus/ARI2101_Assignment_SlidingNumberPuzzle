@@ -197,8 +197,8 @@ public class SearchAlgorithms {
             }
 
             /*
-             * Apply Breadth first search when no improvement is made as fallback
-             * ======== Breadth First Search ==========
+             * Apply Greedy best first search when no improvement is made as fallback
+             * ======== Greedy Best First Search ==========
              */
             GBFSCounter++;
             // Data structures storing unexplored states
