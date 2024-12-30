@@ -2,8 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from numerize import numerize
 
-# Load the data from CSV file
-df = pd.read_csv("resultsAll.csv")
+
 
 def plotPlan(df):
     state1_data = df[df["InitialState"] == "State 1"]
@@ -113,10 +112,20 @@ def computeCorrelation(df):
     correlation = df["TimeTaken"].corr(df["StatesDiscovered"])
     print(f"Correlation between Duration and Unique States: {correlation}")
 
+# Load the data from CSV file for part1
+df = pd.read_csv("results.csv")
 plotPlan(df)
 plotUnique(df)
 plotDuration(df)
 computeCorrelation(df)
+
+# Load the data from CSV file for parts 1 and 2
+df = pd.read_csv("resultsAll.csv")
+plotPlan(df)
+plotUnique(df)
+plotDuration(df)
+computeCorrelation(df)
+
 
 # Show the plots
 plt.show()

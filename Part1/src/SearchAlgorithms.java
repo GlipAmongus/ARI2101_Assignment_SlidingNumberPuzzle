@@ -150,23 +150,23 @@ public class SearchAlgorithms {
         return result;
     }
 
-    // ================= EHC (HC + BFS) ============================
+    // ================= EHC (HC + GBFS) ============================
     public Result FindEnforcedPlan(State initialState, BiFunction<int[], int[], Integer> DistanceFunction) {
         long startTime = System.currentTimeMillis();
         State bestState = initialState;
         result = new Result();
 
-        HashSet<State> closedStates = new HashSet<>(); 
+        HashSet<State> closedStates = new HashSet<>();
 
         bestState.hCost = DistanceFunction.apply(bestState.board, goalState.board);
         closedStates.add(bestState);
 
-        int BFSedgeStates = 0;
-        int BFSCounter = 0; // track times BFS was used
+        int GBFSedgeStates = 0;
+        int GBFSCounter = 0; // track times GBFS was used
 
-        // Run hill climb then bfs until improved by neither 
-        boolean bfsImproved = true; 
-        while (bfsImproved) {
+        // Run hill climb then GBFS until improved by neither
+        boolean GBFSImproved = true;
+        while (GBFSImproved) {
 
             // ============================ HC ================================
             boolean hcImproved = true;
@@ -175,8 +175,8 @@ public class SearchAlgorithms {
 
                 // Goal found, terminate and construct result
                 if (bestState.equals(goalState)) {
-                    System.out.println("BFS counter: " + BFSCounter);
-                    diagnosticHelper(startTime, closedStates.size(), BFSedgeStates, bestState);
+                    System.out.println("GBFS counter: " + GBFSCounter);
+                    diagnosticHelper(startTime, closedStates.size(), GBFSedgeStates, bestState);
                     return result;
                 }
 
@@ -187,7 +187,7 @@ public class SearchAlgorithms {
 
                     child.hCost = DistanceFunction.apply(child.board, goalState.board);
 
-                    // Continue ehc only if immediately better 
+                    // Continue ehc only if immediately better
                     if (child.hCost < bestState.hCost) {
                         bestState = child;
                         hcImproved = true;
@@ -196,16 +196,19 @@ public class SearchAlgorithms {
                 }
             }
 
-            /* Apply Breadth first search when reach plateau
+            /*
+             * Apply Breadth first search when no improvement is made as fallback
              * ======== Breadth First Search ==========
              */
-            BFSCounter++;
+            GBFSCounter++;
+            // Data structures storing unexplored states
             // Data structures storing explored and unexplored states
-            Queue<State> edgeStates = new LinkedList<>();
+            PriorityQueue<State> edgeStates = new PriorityQueue<>(
+                    (state1, state2) -> Integer.compare(state1.hCost, state2.hCost));
             HashSet<State> inEdgeStates = new HashSet<>();
 
             edgeStates.add(bestState);
-            bfsImproved = false;
+            GBFSImproved = false;
             // Traverse all edge states until none are left
             while (!edgeStates.isEmpty()) {
                 // First in queue goes from unexplored to explored
@@ -217,7 +220,7 @@ public class SearchAlgorithms {
                 if (DistanceFunction.apply(currentState.board, goalState.board) == bestState.hCost - 1) {
                     currentState.hCost = DistanceFunction.apply(currentState.board, goalState.board);
                     bestState = currentState;
-                    bfsImproved = true;
+                    GBFSImproved = true;
                     break;
                 }
 
@@ -227,18 +230,19 @@ public class SearchAlgorithms {
                     if (closedStates.contains(child) || inEdgeStates.contains(child))
                         continue;
 
+                    child.hCost = DistanceFunction.apply(child.board, goalState.board);
+                    // Enqueue in order of hcost
                     edgeStates.offer(child);
                     inEdgeStates.add(child);
                 }
             }
 
-            BFSedgeStates += inEdgeStates.size();
+            GBFSedgeStates += inEdgeStates.size();
         }
 
-
         // Goal not found, terminate and construct result
-        System.out.println("BFS counter: " + BFSCounter);
-        diagnosticHelper(startTime, closedStates.size(), BFSedgeStates, bestState);
+        System.out.println("GBFS counter: " + GBFSCounter);
+        diagnosticHelper(startTime, closedStates.size(), GBFSedgeStates, bestState);
         return result;
     }
 
